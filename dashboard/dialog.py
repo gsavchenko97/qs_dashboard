@@ -9,7 +9,7 @@ class DialogWindow(QDialog):
         2. Create a new figure based on already added data
     """
 
-    switch_window = pyqtSignal()
+    switch_window = pyqtSignal(int)
 
     def __init__(self, parent=None):
         super(DialogWindow, self).__init__(parent)
@@ -32,10 +32,10 @@ class DialogWindow(QDialog):
         self.setLayout(layout)
 
     def add_data(self):
-        self.switch_window.emit()
+        self.switch_window.emit(2)
 
     def create_figure(self):
-        self.switch_window.emit()
+        self.switch_window.emit(1)
 
     def exit_clicked(self):
         self.close()
