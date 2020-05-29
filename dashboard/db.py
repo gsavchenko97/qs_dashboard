@@ -4,6 +4,11 @@ import pandas as pd
 
 
 def not_empty_db(db):
+    """
+    Checks if db is empty
+    :param db: database to check
+    :return: True or False
+    """
     if any([len(x) > 0 for x in db.values()]):
         return True
     else:
@@ -11,6 +16,13 @@ def not_empty_db(db):
 
 
 def get_scaled_to_range(values, a, b):
+    """
+    Returns list of values scaled to range from a to b
+    :param values: list of values to scale
+    :param a: start of the scaling range
+    :param b: end of the scaling range
+    :return: scaled list of values
+    """
     minimum = min(values)
     maximum = max(values)
     values = [(value - minimum) / (maximum - minimum) for value in values]  # scaling to [0, 1]
@@ -20,6 +32,13 @@ def get_scaled_to_range(values, a, b):
 
 
 def convert_db_and_metrics_to_csv(database, metrics, default_value=-1):
+    """
+    converts database and metrics from DataBase class to pandas DataFrame
+    :param database: database from DataBase class
+    :param metrics: metrics from DataBase class
+    :param default_value: value to fill for missing measures
+    :return: pandas DataFrame constructed from database and metrics
+    """
     df = {
         'username': [],
         'measurement_name': [],
@@ -54,6 +73,13 @@ def convert_db_and_metrics_to_csv(database, metrics, default_value=-1):
 
 
 def convert_csv_to_db_and_metrics(csv, default_value=-1):
+    """
+    reverse to convert_db_and_metrics_to_csv(database, metrics, default_value=-1)
+    converts pandas DataFrame in appropriate format to database and metrics in DataBase class
+    :param csv: pandas DataFrame to convert
+    :param default_value: value denoting missing values in csv
+    :return: tuple of metrics and database from DataBase class
+    """
     df = csv.copy()
     db = {}
     metrics = {}
@@ -91,6 +117,13 @@ class DataBase:
     }
 
     def __init__(self, username):
+        """
+        DataBase class which stores all the information about users and their
+        daily measurement results. It could save current state of the database and load database from
+        existing dump. All the information stored in dictionary of dictionaries. For every user we have
+        a dictionary mapping some measurement result and day in which it was performed to measurement name.
+        :param username: user's name
+        """
         self.username = username
         self.db_path = os.path.join(self.DB_FOLDER, "database.json")
         self.metrics_converter_path = os.path.join(self.DB_FOLDER, 'metrics_converter.json')
@@ -99,26 +132,50 @@ class DataBase:
         self.metrics = {}
 
     def save_db(self):
+        """
+        saves database state
+        :return: None
+        """
         assert not_empty_db(self.db), 'trying to save empty db'
         json.dump(self.db, open(self.db_path, 'w'))
 
     def load_db(self):
+        """
+        loads database from dump
+        :return: database from DataBase class
+        """
         if os.path.exists(self.db_path):
             return json.load(open(self.db_path))
         else:
             return {}
 
     def load_metrics_converter(self):
+        """
+        loads saved converter for metrics
+        :return: metrics_converter from DataBase class
+        """
         if os.path.exists(self.metrics_converter_path):
             return json.load(open(self.metrics_converter_path))
         else:
             return {}
 
     def save_metrics_converter(self):
+        """
+        saves metrics_converter for metrics from DataBase class
+        :return: None
+        """
         assert self.metrics_converter != {}, 'trying to save empty metrics converter'
         json.dump(self.metrics_converter, open(self.metrics_converter_path, 'w'))
 
     def add_metrics_convertion(self, from_metric, to_metric, from_value, to_value):
+        """
+        adds metrics convert rule to metrics_converter from DataBase class
+        :param from_metric: one of the metrics from convert rule
+        :param to_metric: one of the metrics from convert rule
+        :param from_value: value for one of the metrics
+        :param to_value: corresponding value of the second metric
+        :return: None
+        """
         assert from_metric in self.AVAILABLE_METRICS
         assert to_metric in self.AVAILABLE_METRICS
         self.metrics_converter[(from_metric, to_metric)] = to_value / from_value
@@ -126,15 +183,31 @@ class DataBase:
         self.save_metrics_converter()
 
     def clean_whole_db(self):
+        """
+        removes saved dump of the database
+        :return: None
+        """
         self.db = {}
         if os.path.exists(self.db_path):
             os.system(f'rm {self.db_path}')
 
     def clean_user_db(self):
+        """
+        removes current user related information from database
+        :return: None
+        """
         self.db[self.username] = {}
         self.save_db()
 
     def add_measurement(self, measurement_name, value, metric, day):
+        """
+        adds measurement result to database
+        :param measurement_name: measurement naming
+        :param value: value of measurement
+        :param metric: metric of the value
+        :param day: day in which measurement was done
+        :return: None
+        """
         assert value >= 0, 'trying to add negative value'
         should_convert = False
         from_metric = metric
@@ -178,6 +251,13 @@ class DataBase:
         self.db[self.username] = db
 
     def convert_values(self, values, from_metric, to_metric):
+        """
+        converts values according convert rules from metrics_converter from DataBase class
+        :param values: values to convert
+        :param from_metric: convert from metric
+        :param to_metric: convert to metric
+        :return:
+        """
         multiply_factor = self.metrics_converter[(from_metric, to_metric)]
         values = [value * multiply_factor for value in values]
         return values
