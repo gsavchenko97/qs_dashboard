@@ -19,6 +19,59 @@ def get_scaled_to_range(values, a, b):
     return values
 
 
+def convert_db_and_metrics_to_csv(database, metrics, default_value=-1):
+    df = {
+        'username': [],
+        'measurement_name': [],
+        'value': [],
+        'metric': [],
+        'day': []
+    }
+    minimal_day = min(
+        [day for db in database.values() for key, days in db.items() for day in days if '_days' in key])
+    maximal_day = max(
+        [day for db in database.values() for key, days in db.items() for day in days if '_days' in key])
+    for username in database:
+        db = database[username]
+        for measurement_name in db:
+            if '_days' in measurement_name:
+                continue
+            days = db[f'{measurement_name}_days']
+            for day in range(minimal_day, maximal_day + 1):
+                value = default_value
+                if day in days:
+                    value = db[measurement_name][db[f'{measurement_name}_days'].index(day)]
+
+                df['username'].append(username)
+                df['measurement_name'].append(measurement_name)
+                df['value'].append(value)
+                df['metric'].append(metrics[measurement_name])
+                df['day'].append(day)
+
+    df = pd.DataFrame(df)
+
+    return df
+
+
+def convert_csv_to_db_and_metrics(csv, default_value=-1):
+    df = csv.copy()
+    db = {}
+    metrics = {}
+    for username in df.username.unique():
+        db[username] = {}
+        user_df = df[df.username == username].copy()
+        for measurement_name in user_df.measurement_name.unique():
+            user_measurement_df = user_df[user_df.measurement_name == measurement_name]
+            indices = [i for i, value in enumerate(user_measurement_df.value.values) if value != default_value]
+            days = [day for i, day in enumerate(user_measurement_df.day.values) if i in indices]
+            values = [value for i, value in enumerate(user_measurement_df.value.values) if i in indices]
+            db[username][measurement_name] = values
+            db[username][f'{measurement_name}_days'] = days
+            metrics[measurement_name] = user_measurement_df.metric.values[0]
+
+    return metrics, db
+
+
 class DataBase:
     DB_FOLDER = '.db'
     AVAILABLE_METRICS = {
@@ -82,6 +135,7 @@ class DataBase:
         self.save_db()
 
     def add_measurement(self, measurement_name, value, metric, day):
+        assert value >= 0, 'trying to add negative value'
         should_convert = False
         from_metric = metric
         successfully_converted = True
@@ -94,21 +148,32 @@ class DataBase:
         db = self.db[self.username]
 
         if measurement_name not in db:
-            db[measurement_name] = [value]
-            db[f'{measurement_name}_{day}'] = [day]
+            db[measurement_name] = []
+            db[f'{measurement_name}_days'] = []
+
+        if should_convert:
+            try:
+                for username in self.db:
+                    if username == self.username:
+                        db[measurement_name] = self.convert_values(
+                            db[measurement_name],
+                            from_metric,
+                            to_metric=metric)
+                    elif measurement_name in self.db[username]:
+                        self.db[username][measurement_name] = self.convert_values(
+                            self.db[username][measurement_name],
+                            from_metric,
+                            to_metric=metric)
+                    else:
+                        pass
+            except ValueError:
+                successfully_converted = False
+        if successfully_converted:
+            assert day > db[f'{measurement_name}_{day}'][-1], f'trying to add the day ' \
+                                                              f'prior or equal to last added'
+            db[measurement_name].append(value)
+            db[f'{measurement_name}_days'].append(day)
             self.metrics[measurement_name] = metric
-        else:
-            if should_convert:
-                try:
-                    db[measurement_name] = self.convert_values(db[measurement_name], from_metric, to_metric=metric)
-                except ValueError:
-                    successfully_converted = False
-            if successfully_converted:
-                assert day > db[f'{measurement_name}_{day}'][-1], f'trying to add the day ' \
-                                                                  f'prior or equal to last added'
-                db[measurement_name].append(value)
-                db[f'{measurement_name}_{day}'].append(day)
-                self.metrics[measurement_name] = metric
 
         self.db[self.username] = db
 
@@ -117,10 +182,3 @@ class DataBase:
         values = [value * multiply_factor for value in values]
         return values
 
-    def convert_db_to_csv(self):
-        df = {}
-        df = pd.DataFrame(df)
-        return df
-
-    def convert_csv_to_db(self):
-        pass
