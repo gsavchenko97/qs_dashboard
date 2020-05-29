@@ -1,3 +1,7 @@
+"""
+high level support for data storing
+"""
+
 import json
 import os
 import pandas as pd
@@ -9,10 +13,7 @@ def not_empty_db(db):
     :param db: database to check
     :return: True or False
     """
-    if any([len(x) > 0 for x in db.values()]):
-        return True
-    else:
-        return False
+    return any([len(x) > 0 for x in db.values()])
 
 
 def get_scaled_to_range(values, a, b):
@@ -99,6 +100,12 @@ def convert_csv_to_db_and_metrics(csv, default_value=-1):
 
 
 class DataBase:
+    """
+    DataBase class which stores all the information about users and their
+    daily measurement results. It could save current state of the database and load database from
+    existing dump. All the information stored in dictionary of dictionaries. For every user we have
+    a dictionary mapping some measurement result and day in which it was performed to measurement name.
+    """
     DB_FOLDER = '.db'
     AVAILABLE_METRICS = {
         'киллограмм', 'грамм',
@@ -120,10 +127,7 @@ class DataBase:
 
     def __init__(self, username):
         """
-        DataBase class which stores all the information about users and their
-        daily measurement results. It could save current state of the database and load database from
-        existing dump. All the information stored in dictionary of dictionaries. For every user we have
-        a dictionary mapping some measurement result and day in which it was performed to measurement name.
+        DataBase object initialization
         :param username: user's name
         """
         self.username = username
@@ -148,8 +152,7 @@ class DataBase:
         """
         if os.path.exists(self.db_path):
             return json.load(open(self.db_path))
-        else:
-            return {}
+        return {}
 
     def load_metrics_converter(self):
         """
@@ -158,8 +161,7 @@ class DataBase:
         """
         if os.path.exists(self.metrics_converter_path):
             return json.load(open(self.metrics_converter_path))
-        else:
-            return {}
+        return {}
 
     def save_metrics_converter(self):
         """
@@ -243,9 +245,10 @@ class DataBase:
                         pass
             except ValueError:
                 successfully_converted = False
+
         if successfully_converted:
-            assert day > db[f'{measurement_name}_{day}'][-1], f'trying to add the day ' \
-                                                              f'prior or equal to last added'
+            assert day > db[f'{measurement_name}_days'][-1], 'trying to add the day ' \
+                                                             'prior or equal to last added'
             db[measurement_name].append(value)
             db[f'{measurement_name}_days'].append(day)
             self.metrics[measurement_name] = metric
@@ -263,4 +266,3 @@ class DataBase:
         multiply_factor = self.metrics_converter[(from_metric, to_metric)]
         values = [value * multiply_factor for value in values]
         return values
-
