@@ -1,5 +1,6 @@
 import json
 import os
+import pandas as pd
 
 
 def not_empty_db(db):
@@ -115,3 +116,11 @@ class DataBase:
         multiply_factor = self.metrics_converter[(from_metric, to_metric)]
         values = [value * multiply_factor for value in values]
         return values
+
+    def convert_db_to_csv(self):
+        df = {}
+        df = pd.DataFrame(df)
+        return df
+
+    def convert_csv_to_db(self):
+        pass
