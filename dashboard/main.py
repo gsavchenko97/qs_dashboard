@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication
-
+import sys
+sys.path.append('..')
 from dashboard.controller import Controller
 
 
