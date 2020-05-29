@@ -83,7 +83,7 @@ class DataBase:
     def add_measurement(self, measurement_name, value, metric, day):
         should_convert = False
         from_metric = metric
-        successfully_added = True
+        successfully_converted = True
         if measurement_name in self.metrics and self.metrics[measurement_name] != metric:
             should_convert = True
             from_metric = self.metrics[measurement_name]
@@ -95,17 +95,20 @@ class DataBase:
         if measurement_name not in db:
             db[measurement_name] = [value]
             db[f'{measurement_name}_{day}'] = [day]
+            self.metrics[measurement_name] = metric
         else:
             if should_convert:
                 try:
                     db[measurement_name] = self.convert_values(db[measurement_name], from_metric, to_metric=metric)
                 except ValueError:
-                    successfully_added = False
-            if successfully_added:
+                    successfully_converted = False
+            if successfully_converted:
+                assert day > db[f'{measurement_name}_{day}'][-1], f'trying to add the day ' \
+                                                                  f'prior or equal to last added'
                 db[measurement_name].append(value)
                 db[f'{measurement_name}_{day}'].append(day)
+                self.metrics[measurement_name] = metric
 
-        self.metrics[measurement_name] = metric
         self.db[self.username] = db
 
     def convert_values(self, values, from_metric, to_metric):
