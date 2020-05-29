@@ -66,7 +66,7 @@ class DataBase:
 
     def add_metrics_convertion(self, from_metric, to_metric, from_value, to_value):
         assert from_metric in self.AVAILABLE_METRICS
-        assert to_value in self.AVAILABLE_METRICS
+        assert to_metric in self.AVAILABLE_METRICS
         self.metrics_converter[(from_metric, to_metric)] = to_value / from_value
         self.metrics_converter[(to_value, from_value)] = from_value / to_value
         self.save_metrics_converter()
