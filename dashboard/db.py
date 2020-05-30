@@ -1,5 +1,10 @@
 """
-high level support for data storing
+high level support for data storing and manipulations
+=====================================================
+lorem ipsum lorem ipsum lorem ipsum lorem ipsum
+lorem ipsum lorem ipsum lorem ipsum lorem ipsum
+lorem ipsum lorem ipsum
+lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 """
 
 import json
@@ -108,21 +113,17 @@ class DataBase:
     """
     DB_FOLDER = '.db'
     AVAILABLE_METRICS = {
-        'киллограмм', 'грамм',
-        'миллиграмм',
-        'тонна', 'центнер',
-        'километр', 'метр', 'дециметр',
-        'сантиметр', 'миллиметр',
-        'км ** 2', 'м ** 2',
-        'гектар', 'дм ** 2',
-        'акр', 'см ** 2',
-        'мм ** 2', 'час',
-        'минута', 'секунда', 'миллисекунда',
-        'км ** 3', 'м ** 3',
-        'дм ** 3', 'см ** 3',
-        'мм ** 3', 'литр',
-        'рубль', 'доллар',
-        'евро'
+        'kg', 'gr',
+        'mg', 'ton',
+        'km', 'm',
+        'cm', 'mm',
+        'km ** 2', 'm ** 2',
+        'cm ** 2', 'mm ** 2',
+        'hour', 'minute', 's', 'ms',
+        'km ** 3', 'm ** 3',
+        'cm ** 3', 'mm ** 3', 'liter',
+        'ruble', 'dollar',
+        'euro'
     }
 
     def __init__(self, username):
