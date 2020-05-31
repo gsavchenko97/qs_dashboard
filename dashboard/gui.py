@@ -3,12 +3,17 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import pyqtSignal, QRect
 
+TABS_MAPPING = {
+    "add_data": 2,
+    "create_figure": 1,
+}
+
 
 class MainWindow(QMainWindow):
 
     switch_window = pyqtSignal()
 
-    def __init__(self, tab_num: int = 2):
+    def __init__(self, tab_name: str = "add_data"):
         QMainWindow.__init__(self)
         self.setWindowTitle("QS Dashboard")
 
@@ -18,9 +23,10 @@ class MainWindow(QMainWindow):
         self.init_add_data_tab()
         self.init_create_figure_tab()
 
-        assert 1 <= tab_num <= 2, f"Invalid number of tab: {tab_num}"
-        QTabWidget.setCurrentIndex(self.tabs, tab_num)
+        if tab_name not in TABS_MAPPING:
+            raise ValueError(f"Invalid name of tab: {tab_name}")
 
+        QTabWidget.setCurrentIndex(self.tabs, TABS_MAPPING[tab_name])
         self.setCentralWidget(self.tabs)
 
     def init_add_data_tab(self):
