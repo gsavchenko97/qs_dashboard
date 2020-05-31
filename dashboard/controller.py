@@ -1,18 +1,56 @@
+from typing import Any
+
 from dashboard.dialog import DialogWindow
 from dashboard.gui import MainWindow
+from dashboard.login import Login
+from dashboard.signup import Signup
 
 
 class Controller:
     """
     Allows to manage multiple windows of the application
     """
+    def show_login_window(self, parent_window: Any = None):
+        """
+        Opens log in window and closes the parent window. The parent window must be closed
+        to avoid a situation where two windows are opened at the same time.
+        :param parent_window: window that called this method.
+        """
+        self.login_window = Login()
+        self.login_window.show_main_window.connect(self.show_main_window)
+        self.login_window.show_signup_window.connect(self.show_signup_window)
+        if parent_window is not None:
+            parent_window.close()
+        self.login_window.show()
+
+    def show_signup_window(self, parent_window: Any = None):
+        """
+        Opens sign up window and closes the parent window. The parent window must be closed
+        to avoid a situation where two windows are opened at the same time.
+        :param parent_window: window that called this method.
+        """
+        self.signup_window = Signup()
+        self.signup_window.show_login_window.connect(self.show_login_window)
+        if parent_window is not None:
+            parent_window.close()
+        self.signup_window.show()
+
     def show_dialog_window(self):
+        """
+        Opens dialog window.
+        """
         self.dialog_window = DialogWindow()
         self.dialog_window.switch_window.connect(self.show_main_window)
         self.dialog_window.show()
 
-    def show_main_window(self, tab_num: int):
-        self.main_window = MainWindow(tab_num)
+    def show_main_window(self, tab_name: str, parent_window: Any):
+        """
+        Opens main window and closes the parent window. The parent window must be closed
+        to avoid a situation where two windows are opened at the same time.
+        :param tab_name: which tab must be opened, because the main window has multiple tabs.
+        :param parent_window: window that called this method.
+        """
+        self.main_window = MainWindow(tab_name)
         self.main_window.switch_window.connect(self.show_dialog_window)
-        self.dialog_window.close()
+        parent_window.close()
         self.main_window.show()
