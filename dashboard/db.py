@@ -10,6 +10,7 @@ lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 import json
 import os
 import pandas as pd
+from utils.user import DB_FOLDER
 
 
 def not_empty_db(db):
@@ -131,6 +132,7 @@ class DataBase:
         DataBase object initialization
         :param username: user's name
         """
+        self.DB_FOLDER = DB_FOLDER
         self.username = username
         self.db_path = os.path.join(self.DB_FOLDER, "database.json")
         self.metrics_converter_path = os.path.join(self.DB_FOLDER, 'metrics_converter.json')

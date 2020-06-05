@@ -1,5 +1,6 @@
 import re
 from typing import Tuple
+import os
 
 MAX_USERNAME_LENGTH = 30
 MIN_USERNAME_LENGTH = 2
@@ -10,6 +11,9 @@ MIN_FIRSTNAME_LENGTH = 1
 MAX_PASSWORD_LENGTH = 30
 MIN_PASSWORD_LENGTH = 2
 
+DB_FOLDER = '.db'
+USERNAME_FILE = 'username_file.txt'  # i know that it is not secure
+
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (
     f"""Your password must consist of these characters: {PASSWORD_ALLOWED_CHARS}
@@ -19,15 +23,27 @@ Your password must be at least {MIN_PASSWORD_LENGTH} characters long"""
 
 def check_if_user_exists(
         username: str, password: str
-) -> bool:
+        ) -> bool:
     """
     Check whether the user with the given username and password exists
     :param username:
     :param password:
     :return: True if the user exists otherwise False
     """
-    # TODO: implement it
-    raise NotImplementedError()
+
+    result = False
+    username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
+
+    if os.path.exists(username_file):
+        with open(username_file, 'r') as f:
+            user_credentials = [line.strip().split(' ') for line
+                                in f.readlines()]
+            matched_users = [
+                user_info for user_info in user_credentials if
+                user_info[0] == username and user_info[1] == password]
+            result = len(matched_users) > 0
+
+    return result
 
 
 def create_new_user(
@@ -35,9 +51,24 @@ def create_new_user(
         password: str,
         firstname: str,
         gender: str
-):
-    # TODO: implement it
-    raise NotImplementedError()
+        ) -> None:
+    """
+    Adds to database new user with given information
+    :param username: username or login
+    :param password: password to use in signing process
+    :param firstname: firstname of the user
+    :param gender: gender of the user
+    :return: None
+    """
+    username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
+    open_mode = 'w'
+
+    if os.path.exists(username_file):
+        open_mode = 'a'
+
+    with open(username_file, open_mode) as f:
+        print(f'{username} {password} '
+              f'{firstname} {gender}', file=f)
 
 
 def check_password(password: str) -> Tuple[bool, str]:
@@ -54,7 +85,7 @@ def check_password(password: str) -> Tuple[bool, str]:
             False,
             f"Your password must be at least {MIN_PASSWORD_LENGTH} "
             f"characters long"
-        )
+            )
 
     if not re.match(rf"^[{PASSWORD_ALLOWED_CHARS}]+$", password):
         return False, PASSWORD_REQUIREMENTS
@@ -71,14 +102,26 @@ def check_username(username: str) -> Tuple[bool, str]:
         message: what the user must change in the written username
     """
 
-    # TODO: check if the given username already exists
     if len(username) < MIN_USERNAME_LENGTH:
         return (
             False,
             f"Your username must be at least {MIN_USERNAME_LENGTH} "
             f"characters long"
-        )
-    return True, ""
+            )
+
+    username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
+    result = (False, "This username is already in use. Please try another one.")
+
+    with open(username_file) as f:
+        existing_username = [
+            user_info for user_info in f.readlines() if
+            user_info[0] == username
+            ]
+
+    if len(existing_username) == 0:
+        result = (True, "")
+
+    return result
 
 
 def check_firstname(firstname: str) -> Tuple[bool, str]:
@@ -94,5 +137,5 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
             False,
             f"Your first name must be at least {MIN_FIRSTNAME_LENGTH} "
             f"characters long"
-        )
+            )
     return True, ""
