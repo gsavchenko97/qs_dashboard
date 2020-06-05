@@ -43,14 +43,15 @@ class Controller:
         self.dialog_window.switch_window.connect(self.show_main_window)
         self.dialog_window.show()
 
-    def show_main_window(self, tab_name: str, parent_window: Any):
+    def show_main_window(self, username: str, tab_name: str, parent_window: Any):
         """
         Opens main window and closes the parent window. The parent window must be closed
         to avoid a situation where two windows are opened at the same time.
-        :param tab_name: which tab must be opened, because the main window has multiple tabs.
+        :param username: logged-in user name.
+        :param tab_name: tab that must be opened, because the main window has multiple tabs.
         :param parent_window: window that called this method.
         """
-        self.main_window = MainWindow(tab_name)
+        self.main_window = MainWindow(username=username, tab_name=tab_name)
         self.main_window.switch_window.connect(self.show_dialog_window)
         parent_window.close()
         self.main_window.show()
