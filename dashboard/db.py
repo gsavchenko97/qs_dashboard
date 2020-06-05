@@ -7,10 +7,11 @@ lorem ipsum lorem ipsum
 lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 """
 
+
 import json
 import os
 import pandas as pd
-from utils.user import DB_FOLDER
+from dashboard.utils.user import DB_FOLDER
 
 
 def not_empty_db(db):
