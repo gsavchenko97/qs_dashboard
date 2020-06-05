@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import pyqtSignal, QRect
 
+from dashboard.db import DataBase
+
 TABS_MAPPING = {
     "add_data": 2,
     "create_figure": 1,
@@ -13,9 +15,17 @@ class MainWindow(QMainWindow):
 
     switch_window = pyqtSignal()
 
-    def __init__(self, tab_name: str = "add_data"):
+    def __init__(self, username: str, tab_name: str = "add_data"):
+        """
+        Using the main window the user can add new data and plot a figure
+        :param username: logged-in user name.
+        :param tab_name: tab that must be opened.
+        """
         QMainWindow.__init__(self)
         self.setWindowTitle("QS Dashboard")
+
+        self.username = username
+        self.db = DataBase(username)
 
         self.resize(800, 600)
         self.tabs = QTabWidget()
@@ -24,7 +34,7 @@ class MainWindow(QMainWindow):
         self.init_create_figure_tab()
 
         if tab_name not in TABS_MAPPING:
-            raise ValueError(f"Invalid name of tab: {tab_name}")
+            raise ValueError(f"Invalid name of tab: '{tab_name}'")
 
         QTabWidget.setCurrentIndex(self.tabs, TABS_MAPPING[tab_name])
         self.setCentralWidget(self.tabs)
