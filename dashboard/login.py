@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import (QDialog, QPushButton, QLineEdit, QGridLayout, QMessageBox)
+from PyQt5.QtWidgets import (
+    QDialog, QPushButton, QLineEdit, QGridLayout, QMessageBox
+)
 from PyQt5.QtCore import pyqtSignal
 
 from dashboard.utils.user import (

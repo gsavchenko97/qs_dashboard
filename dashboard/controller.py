@@ -12,8 +12,9 @@ class Controller:
     """
     def show_login_window(self, parent_window: Any = None):
         """
-        Opens log in window and closes the parent window. The parent window must be closed
-        to avoid a situation where two windows are opened at the same time.
+        Opens log in window and closes the parent window.
+        The parent window must be closed to avoid a situation
+        where two windows are opened at the same time.
         :param parent_window: window that called this method.
         """
         self.login_window = Login()
@@ -25,8 +26,9 @@ class Controller:
 
     def show_signup_window(self, parent_window: Any = None):
         """
-        Opens sign up window and closes the parent window. The parent window must be closed
-        to avoid a situation where two windows are opened at the same time.
+        Opens sign up window and closes the parent window.
+        The parent window must be closed to avoid a situation
+        where two windows are opened at the same time.
         :param parent_window: window that called this method.
         """
         self.signup_window = Signup()
@@ -43,12 +45,16 @@ class Controller:
         self.dialog_window.switch_window.connect(self.show_main_window)
         self.dialog_window.show()
 
-    def show_main_window(self, username: str, tab_name: str, parent_window: Any):
+    def show_main_window(
+            self, username: str, tab_name: str, parent_window: Any
+    ):
         """
-        Opens main window and closes the parent window. The parent window must be closed
-        to avoid a situation where two windows are opened at the same time.
+        Opens main window and closes the parent window.
+        The parent window must be closed to avoid a situation
+        where two windows are opened at the same time.
         :param username: logged-in user name.
-        :param tab_name: tab that must be opened, because the main window has multiple tabs.
+        :param tab_name: tab that must be opened,
+            because the main window has multiple tabs.
         :param parent_window: window that called this method.
         """
         self.main_window = MainWindow(username=username, tab_name=tab_name)

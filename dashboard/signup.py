@@ -91,7 +91,9 @@ class Signup(QDialog):
 
         if gender is None:
             messages.append("Gender:")
-            messages.append(self.transform_message("Please choose your gender"))
+            messages.append(self.transform_message(
+                "Please choose your gender"
+            ))
 
         msg_box = QMessageBox()
         msg_box.setText("\n".join(messages))

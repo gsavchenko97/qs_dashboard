@@ -3,11 +3,13 @@ from typing import Tuple
 
 MAX_USERNAME_LENGTH = 30
 MIN_USERNAME_LENGTH = 2
+
 MAX_FIRSTNAME_LENGTH = 30
 MIN_FIRSTNAME_LENGTH = 1
 
 MAX_PASSWORD_LENGTH = 30
 MIN_PASSWORD_LENGTH = 2
+
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (
     f"""Your password must consist of these characters: {PASSWORD_ALLOWED_CHARS}
@@ -58,6 +60,7 @@ def check_password(password: str) -> Tuple[bool, str]:
         return False, PASSWORD_REQUIREMENTS
 
     return True, ""
+
 
 def check_username(username: str) -> Tuple[bool, str]:
     """
