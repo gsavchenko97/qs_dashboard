@@ -6,6 +6,12 @@ import pandas as pd
 
 from dashboard.utils.user import DF_COLUMNS
 
+import gettext
+from pathlib import Path
+
+data_path = Path(__file__).resolve().parent
+gettext.install("qs_dashboard", data_path)
+
 
 class LoadDataWindow(QDialog):
     """
@@ -22,22 +28,22 @@ class LoadDataWindow(QDialog):
         layout = QGridLayout()
 
         self.description_lbl = QLabel(
-            "Choose csv-like file to download data from:"
+            _("Choose csv-like file to download data from:")
         )
         layout.addWidget(self.description_lbl, 0, 0, 1, 3)
 
-        self.choose_file_btn = QPushButton("Choose file")
+        self.choose_file_btn = QPushButton(_("Choose file"))
         self.choose_file_btn.clicked.connect(self.choose_data_file)
         layout.addWidget(self.choose_file_btn, 1, 0, 1, 3)
 
-        self.status_lbl = QLabel("No file chosen")
+        self.status_lbl = QLabel(_("No file chosen"))
         layout.addWidget(self.status_lbl, 2, 0, 1, 3)
 
-        self.cancel_btn = QPushButton("Ok")
+        self.cancel_btn = QPushButton(_("Ok"))
         self.cancel_btn.clicked.connect(self.handle_ok)
         layout.addWidget(self.cancel_btn, 3, 0, 1, 2)
 
-        self.cancel_btn = QPushButton("Cancel")
+        self.cancel_btn = QPushButton(_("Cancel"))
         self.cancel_btn.clicked.connect(self.handle_cancel)
         layout.addWidget(self.cancel_btn, 3, 2, 1, 1)
 
@@ -55,7 +61,7 @@ class LoadDataWindow(QDialog):
         """
         # print(self.filename)
         if len(self.filename) == 0:
-            self.status_lbl.setText("PLease choose file")
+            self.status_lbl.setText(_("PLease choose file"))
             return
         # print('before:', self.parent.db.db, self.parent.db.metrics)
         df = pd.read_csv(self.filename, sep=",")
@@ -69,7 +75,7 @@ class LoadDataWindow(QDialog):
 
         if fail:
             self.status_lbl.setText(
-                "PLease choose another file with acceptable values"
+                _("PLease choose another file with acceptable values")
             )
         else:
             # print(df)
@@ -91,7 +97,7 @@ class LoadDataWindow(QDialog):
     def choose_data_file(self):
         filename, _ = QFileDialog.getOpenFileName(
             None,
-            caption="Open file",
+            caption=_("Open file"),
             directory="",
             filter="(*.csv *.tsv)",
         )

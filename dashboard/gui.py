@@ -6,6 +6,12 @@ from PyQt5.QtCore import pyqtSignal, QRect
 from dashboard.db import DataBase
 from dashboard.figure import CreateFigure
 
+import gettext
+from pathlib import Path
+
+data_path = Path(__file__).resolve().parent
+gettext.install("qs_dashboard", data_path)
+
 TABNAME2IDX = {
     "add_data": 0,
     "create_figure": 1,
@@ -31,7 +37,7 @@ class MainWindow(QMainWindow):
         :param tab_name: tab that must be opened.
         """
         QMainWindow.__init__(self)
-        self.setWindowTitle(f"QS Dashboard: {username}")
+        self.setWindowTitle(_(f"QS Dashboard") + f": {username}")
 
         self.username = username
         self.db = DataBase(username=username)
@@ -42,7 +48,7 @@ class MainWindow(QMainWindow):
         self.init_add_data_tab()
 
         self.figure = CreateFigure(self)
-        self.tabs.addTab(self.figure, "---> Plots <---")
+        self.tabs.addTab(self.figure, _("---> Plots <---"))
 
         if tab_name not in TABNAME2IDX:
             raise ValueError(f"Invalid name of tab: '{tab_name}'")
@@ -65,7 +71,7 @@ class MainWindow(QMainWindow):
 
     def init_add_data_tab(self):
         self.add_data_tab = QWidget()
-        self.tabs.addTab(self.add_data_tab, "---> Data <---")
+        self.tabs.addTab(self.add_data_tab, _("---> Data <---"))
 
         # self.widget = QWidget(self.add_data_tab)
 
@@ -82,27 +88,27 @@ class MainWindow(QMainWindow):
         self.hbox.addWidget(lwidget)
 
         rwidget, grid_layout = QWidget(), QGridLayout()
-        button = QPushButton("Load Data")
+        button = QPushButton(_("Load Data"))
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_data_loading)
         grid_layout.addWidget(button, 0, 0)
 
-        button = QPushButton("Add Measurement")
+        button = QPushButton(_("Add Measurement"))
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_measurement_adding)
         grid_layout.addWidget(button, 1, 0)
 
-        button = QPushButton("Add metrics convertation rule")
+        button = QPushButton(_("Add metrics convertation rule"))
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_conv_rule_adding)
         grid_layout.addWidget(button, 2, 0)
 
-        button = QPushButton("Save Data")
+        button = QPushButton(_("Save Data"))
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_data_saving)
         grid_layout.addWidget(button, 3, 0)
 
-        button = QPushButton("Logout")
+        button = QPushButton(_("Logout"))
         button.setEnabled(True)
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_logout)
@@ -120,13 +126,13 @@ class MainWindow(QMainWindow):
         self.list_widget_conv_rules.clear()
         df = self.user_df
         if "measurement_name" in df.columns:
-            for metric in ['Added measurements:'] + \
+            for metric in [_("Added measurements:")] + \
                           list(df.measurement_name.unique()):
                 QListWidgetItem(metric, self.list_widget
                 )
         converter_rules = self.db.metrics_converter
         QListWidgetItem(
-            f'Added convertation rules:',
+            _("Added convertation rules:"),
             self.list_widget_conv_rules
         )
         for (from_metric, to_metric), val in converter_rules.items():
@@ -151,7 +157,7 @@ class MainWindow(QMainWindow):
         options |= QFileDialog.DontUseNativeDialog
         filename, _ = QFileDialog.getSaveFileName(
             self,
-            "Save file",
+            _("Save file"),
             "",
             "All Files (*);;Text Files (*.txt)", options=options
         )

@@ -52,20 +52,6 @@ class DataBase:
     existing dump. All the information stored in dictionary of dictionaries. For every user we have
     a dictionary mapping some measurement result and day in which it was performed to measurement name.
     """
-    DB_FOLDER = str(Path(__file__).resolve().parent.parent / ".db")
-    AVAILABLE_METRICS = {
-        'kg', 'gr',
-        'mg', 'ton',
-        'km', 'm',
-        'cm', 'mm',
-        'km ** 2', 'm ** 2',
-        'cm ** 2', 'mm ** 2',
-        'hour', 'minute', 's', 'ms',
-        'km ** 3', 'm ** 3',
-        'cm ** 3', 'mm ** 3', 'liter',
-        'ruble', 'dollar',
-        'euro'
-        }
 
     def __init__(
             self,

@@ -6,6 +6,12 @@ from PyQt5.QtCore import pyqtSignal
 from dashboard.utils.user import AVAILABLE_METRICS
 import re
 
+import gettext
+from pathlib import Path
+
+data_path = Path(__file__).resolve().parent
+gettext.install("qs_dashboard", data_path)
+
 
 def check_matching_to_chars(sting_val: str, allowed_char: str) -> bool:
     return bool(re.match(rf"^[{allowed_char}]+$", sting_val))
@@ -27,13 +33,13 @@ class MeasurementWindow(QDialog):
         layout = QGridLayout()
 
         self.line_edit_measure_name = QLineEdit()
-        self.line_edit_measure_name.setPlaceholderText('Enter measurement name')
+        self.line_edit_measure_name.setPlaceholderText(_("Enter measurement name"))
         self.line_edit_measure_name.setMaxLength(30)
         self.line_edit_measure_name.setFixedHeight(35)
         layout.addWidget(self.line_edit_measure_name, 0, 0, 1, 3)
 
         self.line_edit_value = QLineEdit()
-        self.line_edit_value.setPlaceholderText('Enter measurement value')
+        self.line_edit_value.setPlaceholderText(_("Enter measurement value"))
         self.line_edit_value.setMaxLength(30)
         self.line_edit_value.setFixedHeight(35)
         layout.addWidget(self.line_edit_value, 1, 0, 1, 3)
@@ -42,20 +48,20 @@ class MeasurementWindow(QDialog):
         # layout.addWidget(self.acceptabele_metrics_label, 2, 0, 1, 3)
 
         self.acceptabele_metrics = QComboBox()
-        self.acceptabele_metrics.addItems(['-- choose metric --'] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics.addItems([_"-- choose metric --")] + sorted(AVAILABLE_METRICS))
         layout.addWidget(self.acceptabele_metrics, 2, 0, 1, 3)
 
         self.line_edit_day = QLineEdit()
-        self.line_edit_day.setPlaceholderText('Enter measurement day')
+        self.line_edit_day.setPlaceholderText(_("Enter measurement day"))
         self.line_edit_day.setMaxLength(3.0)
         self.line_edit_day.setFixedHeight(35)
         layout.addWidget(self.line_edit_day, 3, 0, 1, 3)
 
-        button_signup = QPushButton('Add measurement')
+        button_signup = QPushButton(_("Add measurement"))
         button_signup.clicked.connect(self.handle_measurement_addition)
         layout.addWidget(button_signup, 4, 0, 1, 3)
 
-        button_login = QPushButton('Cancel')
+        button_login = QPushButton(_("Cancel"))
         button_login.clicked.connect(self.handle_cancel)
         layout.addWidget(button_login, 5, 0, 1, 3)
 
@@ -77,7 +83,7 @@ class MeasurementWindow(QDialog):
 
         valid_name = check_matching_to_chars(measure_name, allowed_name_chars)
         valid_value = check_matching_to_chars(measure_value, allowed_value_chars)
-        valid_metric = metric != "-- choose metric --"
+        valid_metric = metric != _("-- choose metric --")
         valid_day = check_matching_to_chars(day, r"\d")
 
         valid_day = int(day) > 0 if valid_day else False
@@ -98,8 +104,8 @@ class MeasurementWindow(QDialog):
         convertation_rule_exist = (from_metric, metric) in self.parent.db.metrics_converter.keys()
         if should_convert and not convertation_rule_exist:
             msg_box = QMessageBox()
-            msg_box.setText("Please try first to add convertation rule\n"
-                            f"from {from_metric} to {metric}")
+            msg_box.setText(_("Please try first to add convertation rule\n") +
+                            _("from") + f" {from_metric} " + _("to") + f" {metric}")
             msg_box.exec_()
         elif add_measurement_flags:
             measure_value = float(measure_value)
@@ -115,8 +121,8 @@ class MeasurementWindow(QDialog):
             print('after:', self.parent.db.db, self.parent.db.metrics)
         else:
             msg_box = QMessageBox()
-            msg_box.setText("Please fill correct values for:\n"
-                            "days > 0, values > 0, measurement_names:\n"
+            msg_box.setText(_("Please fill correct values for:\n") +
+                            _("days > 0, values > 0, measurement_names:\n") +
                             "[A-Za-z]")
             msg_box.exec_()
         self.close()
@@ -131,37 +137,37 @@ class MeasurementConvertRuleWindow(QDialog):
     def __init__(self, parent=None):
         super(MeasurementConvertRuleWindow, self).__init__(parent)
 
-        self.setWindowTitle('Sign Up')
+        self.setWindowTitle(_("Sign Up"))
         self.resize(400, 150)
         self.parent = parent
 
         layout = QGridLayout()
 
         self.acceptabele_metrics_from = QComboBox()
-        self.acceptabele_metrics_from.addItems(['-- choose metric --'] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics_from.addItems([_("-- choose metric --")] + sorted(AVAILABLE_METRICS))
         layout.addWidget(self.acceptabele_metrics_from, 0, 0, 1, 2)
 
         self.acceptabele_metrics_to = QComboBox()
-        self.acceptabele_metrics_to.addItems(['-- choose metric --'] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics_to.addItems([_("-- choose metric --")] + sorted(AVAILABLE_METRICS))
         layout.addWidget(self.acceptabele_metrics_to, 0, 1, 1, 2)
 
         self.line_edit_value_from = QLineEdit()
-        self.line_edit_value_from.setPlaceholderText('Enter value')
+        self.line_edit_value_from.setPlaceholderText(_("Enter value"))
         self.line_edit_value_from.setMaxLength(30.0)
         self.line_edit_value_from.setFixedHeight(35)
         layout.addWidget(self.line_edit_value_from, 1, 0, 1, 1)
 
         self.line_edit_value_to = QLineEdit()
-        self.line_edit_value_to.setPlaceholderText('Enter value')
+        self.line_edit_value_to.setPlaceholderText(_("Enter value"))
         self.line_edit_value_to.setMaxLength(30.0)
         self.line_edit_value_to.setFixedHeight(35)
         layout.addWidget(self.line_edit_value_to, 1, 2, 1, 1)
 
-        button_signup = QPushButton('Add rule')
+        button_signup = QPushButton(_("Add rule"))
         button_signup.clicked.connect(self.handle_conv_rule_addition)
         layout.addWidget(button_signup, 4, 0, 1, 3)
 
-        button_login = QPushButton('Cancel')
+        button_login = QPushButton(_("Cancel"))
         button_login.clicked.connect(self.handle_cancel)
         layout.addWidget(button_login, 5, 0, 1, 3)
 
@@ -199,8 +205,8 @@ class MeasurementConvertRuleWindow(QDialog):
             # self.show_login_window.emit(self)
         else:
             msg_box = QMessageBox()
-            msg_box.setText("Please fill correct values for:\n"
-                            "metrics sholdn't be the same\n"
-                            "values > 0")
+            msg_box.setText(_("Please fill correct values for:\n") +
+                            _("metrics sholdn't be the same\n") +
+                            _("values > 0"))
             msg_box.exec_()
             self.close()

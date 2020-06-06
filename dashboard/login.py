@@ -7,6 +7,12 @@ from dashboard.utils.user import (
     match_username_password, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH
 )
 
+import gettext
+from pathlib import Path
+
+data_path = Path(__file__).resolve().parent
+gettext.install("qs_dashboard", data_path)
+
 
 class Login(QDialog):
     """
@@ -23,26 +29,26 @@ class Login(QDialog):
         layout = QGridLayout()
 
         self.line_edit_username = QLineEdit()
-        self.line_edit_username.setPlaceholderText('Username')
+        self.line_edit_username.setPlaceholderText(_("Username"))
         self.line_edit_username.setMaxLength(MAX_USERNAME_LENGTH)
         self.line_edit_username.setFixedHeight(35)
         layout.addWidget(self.line_edit_username, 0, 0, 1, 3)
 
         self.line_edit_password = QLineEdit()
-        self.line_edit_password.setPlaceholderText('Password')
+        self.line_edit_password.setPlaceholderText(_("Password"))
         self.line_edit_password.setMaxLength(MAX_PASSWORD_LENGTH)
         self.line_edit_password.setFixedHeight(35)
         layout.addWidget(self.line_edit_password, 1, 0, 1, 3)
 
-        button_login = QPushButton('Log In')
+        button_login = QPushButton(_("Log In"))
         button_login.clicked.connect(self.handle_login)
         layout.addWidget(button_login, 2, 0, 1, 1)
 
-        button_signup = QPushButton('Sign Up')
+        button_signup = QPushButton(_("Sign Up"))
         button_signup.clicked.connect(self.handle_signup)
         layout.addWidget(button_signup, 2, 1, 1, 1)
 
-        button_signup = QPushButton('Exit')
+        button_signup = QPushButton(_("Exit"))
         button_signup.clicked.connect(self.handle_exit)
         layout.addWidget(button_signup, 2, 2, 1, 1)
 
@@ -59,7 +65,7 @@ class Login(QDialog):
             self.show_main_window.emit(username, "add_data", self)
         else:
             msg = QMessageBox()
-            msg.setText("Incorrect Username or Password")
+            msg.setText(_("Incorrect Username or Password"))
             msg.exec_()
 
     def handle_signup(self):

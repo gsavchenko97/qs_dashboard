@@ -17,15 +17,15 @@ class DialogWindow(QDialog):
 
         layout = QVBoxLayout()
 
-        self.add_data_button = QPushButton("Add Data")
+        self.add_data_button = QPushButton(_("Add Data"))
         self.add_data_button.clicked.connect(self.add_data)
         layout.addWidget(self.add_data_button)
 
-        self.create_fig_button = QPushButton("Create Figure")
+        self.create_fig_button = QPushButton(_("Create Figure"))
         self.create_fig_button.clicked.connect(self.create_figure)
         layout.addWidget(self.create_fig_button)
 
-        self.exit_button = QPushButton("Exit")
+        self.exit_button = QPushButton(_("Exit"))
         self.exit_button.clicked.connect(self.exit_clicked)
         layout.addWidget(self.exit_button)
 
