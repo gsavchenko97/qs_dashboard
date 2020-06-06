@@ -1,6 +1,7 @@
 import os
 import re
 from typing import Tuple
+from pathlib import Path
 
 MAX_USERNAME_LENGTH = 30
 MIN_USERNAME_LENGTH = 2
@@ -11,7 +12,7 @@ MIN_FIRSTNAME_LENGTH = 1
 MAX_PASSWORD_LENGTH = 30
 MIN_PASSWORD_LENGTH = 2
 
-DB_FOLDER = ".db"
+DB_FOLDER = Path(__file__).resolve().parent.parent.parent / ".db"
 USERNAME_FILE = "username_file.txt"  # i know that it is not secure
 DF_COLUMNS = [
     "username", "measurement_name", "value", "metric", "day"
@@ -32,8 +33,8 @@ def check_if_user_exists(username: str, password: str) -> bool:
     :param password:
     :return: True if the user exists otherwise False
     """
-    username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
-    if os.path.exists(username_file):
+    username_file = DB_FOLDER / USERNAME_FILE
+    if username_file.exists():
         with open(username_file, 'r') as f:
             user_credentials = [
                 line.strip().split(' ') for line in f.readlines()
@@ -60,12 +61,12 @@ def create_new_user(
     :param gender: gender of the user
     :return: None
     """
-    username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
+
+    os.makedirs(DB_FOLDER, exist_ok=True)
+    username_file = DB_FOLDER / USERNAME_FILE
     open_mode = "w"
-
-    if os.path.exists(username_file):
+    if username_file.exists():
         open_mode = "a"
-
     with open(username_file, open_mode) as f:
         print(f"{username} {password} {firstname} {gender}", file=f)
 
@@ -108,10 +109,10 @@ def check_username(username: str) -> Tuple[bool, str]:
             f"characters long"
         )
 
-    username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
+    username_file = DB_FOLDER / USERNAME_FILE
     result = (True, "")
 
-    if os.path.exists(username_file):
+    if username_file.exists():
         with open(username_file) as f:
             user_credentials = [
                 line.strip().split(' ') for line in f.readlines()

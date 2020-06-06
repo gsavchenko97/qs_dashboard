@@ -9,6 +9,7 @@ lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 
 import json
 import os
+from pathlib import Path
 import pandas as pd
 from dashboard.utils.user import DB_FOLDER
 from typing import Dict
@@ -114,7 +115,7 @@ class DataBase:
     existing dump. All the information stored in dictionary of dictionaries. For every user we have
     a dictionary mapping some measurement result and day in which it was performed to measurement name.
     """
-    DB_FOLDER = '.db'
+    DB_FOLDER = str(Path(__file__).resolve().parent.parent / ".db")
     AVAILABLE_METRICS = {
         'kg', 'gr',
         'mg', 'ton',
