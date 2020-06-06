@@ -48,8 +48,8 @@ class Controller:
         self.dialog_window.show()
 
     def show_main_window(
-            self, username: str, tab_name: str, parent_window: Any
-            ):
+        self, username: str, tab_name: str, parent_window: Any
+    ):
         """
         Opens main window and closes the parent window.
         The parent window must be closed to avoid a situation
@@ -62,18 +62,16 @@ class Controller:
         self.main_window = MainWindow(username=username, tab_name=tab_name)
         self.main_window.switch_window.connect(self.show_dialog_window)
         self.main_window.show_login_window.connect(self.show_login_window)
-        self.main_window.show_data_loading_window.connect(self.show_load_data_window)
+        self.main_window.show_data_loading_window.connect(
+            self.show_load_data_window
+        )
         parent_window.close()
         self.main_window.show()
 
-    def show_load_data_window(
-            self, username: str, parent_window: Any
-            ):
-
+    def show_load_data_window(self, username: str):
         """
         Opens dialog window for data loading from csv-like file
         :param username:
-        :param parent_window:
         :return:
         """
         self.load_data_window = LoadDataWindow(username=username)

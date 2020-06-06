@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (
-    QDialog, QPushButton, QRadioButton, QLineEdit, QGridLayout, QMessageBox
+    QDialog, QPushButton, QRadioButton, QLineEdit, QGridLayout
 )
 from PyQt5.QtCore import pyqtSignal
 

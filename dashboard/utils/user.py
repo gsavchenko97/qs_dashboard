@@ -1,6 +1,6 @@
+import os
 import re
 from typing import Tuple
-import os
 
 MAX_USERNAME_LENGTH = 30
 MIN_USERNAME_LENGTH = 2
@@ -11,50 +11,47 @@ MIN_FIRSTNAME_LENGTH = 1
 MAX_PASSWORD_LENGTH = 30
 MIN_PASSWORD_LENGTH = 2
 
-DB_FOLDER = '.db'
-USERNAME_FILE = 'username_file.txt'  # i know that it is not secure
+DB_FOLDER = ".db"
+USERNAME_FILE = "username_file.txt"  # i know that it is not secure
 DF_COLUMNS = [
-    'username', 'measurement_name', 'value', 'metric', 'day'
-    ]
+    "username", "measurement_name", "value", "metric", "day"
+]
 
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (
-    f"""Your password must consist of these characters: {PASSWORD_ALLOWED_CHARS}
-Your password must be at least {MIN_PASSWORD_LENGTH} characters long"""
+    f"Your password must consist of these characters: "
+    f"{PASSWORD_ALLOWED_CHARS} \n"
+    f"Your password must be at least {MIN_PASSWORD_LENGTH} characters long"
 )
 
 
-def check_if_user_exists(
-        username: str, password: str
-        ) -> bool:
+def check_if_user_exists(username: str, password: str) -> bool:
     """
     Check whether the user with the given username and password exists
     :param username:
     :param password:
     :return: True if the user exists otherwise False
     """
-
-    result = False
     username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
-
     if os.path.exists(username_file):
         with open(username_file, 'r') as f:
-            user_credentials = [line.strip().split(' ') for line
-                                in f.readlines()]
+            user_credentials = [
+                line.strip().split(' ') for line in f.readlines()
+            ]
             matched_users = [
                 user_info for user_info in user_credentials if
-                user_info[0] == username and user_info[1] == password]
-            result = len(matched_users) > 0
-
-    return result
+                user_info[0] == username and user_info[1] == password
+            ]
+            return len(matched_users) > 0
+    return False
 
 
 def create_new_user(
-        username: str,
-        password: str,
-        firstname: str,
-        gender: str
-        ) -> None:
+    username: str,
+    password: str,
+    firstname: str,
+    gender: str,
+) -> None:
     """
     Adds to database new user with given information
     :param username: username or login
@@ -64,14 +61,13 @@ def create_new_user(
     :return: None
     """
     username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
-    open_mode = 'w'
+    open_mode = "w"
 
     if os.path.exists(username_file):
-        open_mode = 'a'
+        open_mode = "a"
 
     with open(username_file, open_mode) as f:
-        print(f'{username} {password} '
-              f'{firstname} {gender}', file=f)
+        print(f"{username} {password} {firstname} {gender}", file=f)
 
 
 def check_password(password: str) -> Tuple[bool, str]:
@@ -88,7 +84,7 @@ def check_password(password: str) -> Tuple[bool, str]:
             False,
             f"Your password must be at least {MIN_PASSWORD_LENGTH} "
             f"characters long"
-            )
+        )
 
     if not re.match(rf"^[{PASSWORD_ALLOWED_CHARS}]+$", password):
         return False, PASSWORD_REQUIREMENTS
@@ -110,22 +106,26 @@ def check_username(username: str) -> Tuple[bool, str]:
             False,
             f"Your username must be at least {MIN_USERNAME_LENGTH} "
             f"characters long"
-            )
+        )
 
     username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
     result = (True, "")
 
     if os.path.exists(username_file):
         with open(username_file) as f:
-            user_credentials = [line.strip().split(' ') for line
-                                in f.readlines()]
+            user_credentials = [
+                line.strip().split(' ') for line in f.readlines()
+            ]
             existing_username = [
-                user_info for user_info in user_credentials if
-                user_info[0] == username
-                ]
+                user_info for user_info in user_credentials
+                if user_info[0] == username
+            ]
 
         if len(existing_username) > 0:
-            result = (False, "This username is already in use. Please try another one.")
+            result = (
+                False,
+                "This username is already in use. Please try another one."
+            )
 
     return result
 
@@ -143,5 +143,5 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
             False,
             f"Your first name must be at least {MIN_FIRSTNAME_LENGTH} "
             f"characters long"
-            )
+        )
     return True, ""

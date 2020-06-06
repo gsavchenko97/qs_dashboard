@@ -95,19 +95,26 @@ class Signup(QDialog):
                 "Please choose your gender"
             ))
 
-        msg_box = QMessageBox()
-        msg_box.setText("\n".join(messages))
-        msg_box.exec_()
+        create_user_flag = (
+                valid_password and
+                valid_firstname and
+                valid_firstname and
+                valid_username and
+                gender is not None
+        )
 
-        if valid_password and valid_firstname and valid_firstname and valid_username and gender is not None:
+        if create_user_flag:
             create_new_user(
                 username=username,
                 password=password,
                 firstname=firstname,
                 gender=gender
             )
-
-        self.show_login_window.emit(self)
+            self.show_login_window.emit(self)
+        else:
+            msg_box = QMessageBox()
+            msg_box.setText("\n".join(messages))
+            msg_box.exec_()
 
     @staticmethod
     def transform_message(msg: str) -> str:

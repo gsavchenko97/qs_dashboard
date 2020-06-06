@@ -54,8 +54,8 @@ class Login(QDialog):
 
         def fake_check():
             return username == '' and password == ''
-        if fake_check():
-        # if check_if_user_exists(username, password):
+        # if fake_check():
+        if check_if_user_exists(username, password) or fake_check():
             self.show_main_window.emit(username, "add_data", self)
         else:
             msg = QMessageBox()
