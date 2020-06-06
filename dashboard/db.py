@@ -7,16 +7,17 @@ lorem ipsum lorem ipsum
 lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 """
 
-
 import json
 import os
 import pandas as pd
 from dashboard.utils.user import DB_FOLDER
+from typing import Dict
 
 
-def not_empty_db(db):
+def not_empty_db(db: Dict) -> bool:
     """
     Checks if db is empty
+    :type db: sdsd
     :param db: database to check
     :return: True or False
     """
@@ -53,14 +54,14 @@ def convert_db_and_metrics_to_csv(database, metrics, default_value=-1):
         'value': [],
         'metric': [],
         'day': []
-    }
+        }
     minimal_day = min(
         [day for db in database.values() for key, days in db.items() for day in days if '_days' in key])
     maximal_day = max(
         [day for db in database.values() for key, days in db.items() for day in days if '_days' in key])
-    for username in database:
+    for username in sorted(database.keys()):
         db = database[username]
-        for measurement_name in db:
+        for measurement_name in sorted(db.keys()):
             if '_days' in measurement_name:
                 continue
             days = db[f'{measurement_name}_days']
@@ -103,7 +104,7 @@ def convert_csv_to_db_and_metrics(csv, default_value=-1):
             db[username][f'{measurement_name}_days'] = days
             metrics[measurement_name] = user_measurement_df.metric.values[0]
 
-    return metrics, db
+    return db, metrics
 
 
 class DataBase:
@@ -126,19 +127,25 @@ class DataBase:
         'cm ** 3', 'mm ** 3', 'liter',
         'ruble', 'dollar',
         'euro'
-    }
+        }
 
-    def __init__(self, username):
+    def __init__(self, username, load_from_saved=True):
         """
         DataBase object initialization
         :param username: user's name
         """
         self.DB_FOLDER = DB_FOLDER
+        if not os.path.exists(DB_FOLDER):
+            os.makedirs(DB_FOLDER, exist_ok=True)
         self.username = username
         self.db_path = os.path.join(self.DB_FOLDER, "database.json")
         self.metrics_converter_path = os.path.join(self.DB_FOLDER, 'metrics_converter.json')
-        self.db = self.load_db()
-        self.metrics_converter = self.load_metrics_converter()
+        if load_from_saved:
+            self.db = self.load_db()
+            self.metrics_converter = self.load_metrics_converter()
+        else:
+            self.db = {}
+            self.metrics_converter = {}
         self.metrics = {}
 
     def save_db(self):
@@ -164,7 +171,11 @@ class DataBase:
         :return: metrics_converter from DataBase class
         """
         if os.path.exists(self.metrics_converter_path):
-            return json.load(open(self.metrics_converter_path))
+            from_saved = json.load(open(self.metrics_converter_path))
+            metrics_converter = {}
+            for key in from_saved:
+                metrics_converter[tuple(key.split('+'))] = from_saved[key]
+            return metrics_converter
         return {}
 
     def save_metrics_converter(self):
@@ -173,7 +184,11 @@ class DataBase:
         :return: None
         """
         assert self.metrics_converter != {}, 'trying to save empty metrics converter'
-        json.dump(self.metrics_converter, open(self.metrics_converter_path, 'w'))
+        to_save = {}
+        for key in self.metrics_converter:
+            print(key)
+            to_save['+'.join(key)] = self.metrics_converter[key]
+        json.dump(to_save, open(self.metrics_converter_path, 'w'))
 
     def add_metrics_convertion(self, from_metric, to_metric, from_value, to_value):
         """
@@ -187,7 +202,7 @@ class DataBase:
         assert from_metric in self.AVAILABLE_METRICS
         assert to_metric in self.AVAILABLE_METRICS
         self.metrics_converter[(from_metric, to_metric)] = to_value / from_value
-        self.metrics_converter[(to_value, from_value)] = from_value / to_value
+        self.metrics_converter[(to_metric, from_metric)] = from_value / to_value
         self.save_metrics_converter()
 
     def clean_whole_db(self):
@@ -251,7 +266,8 @@ class DataBase:
                 successfully_converted = False
 
         if successfully_converted:
-            assert day > db[f'{measurement_name}_days'][-1], 'trying to add the day ' \
+            assert len(db[f'{measurement_name}_days']) == 0 or \
+                   day > db[f'{measurement_name}_days'][-1], 'trying to add the day ' \
                                                              'prior or equal to last added'
             db[measurement_name].append(value)
             db[f'{measurement_name}_days'].append(day)
