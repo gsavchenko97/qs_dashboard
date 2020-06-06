@@ -6,10 +6,11 @@ from PyQt5.QtCore import pyqtSignal, QRect
 from dashboard.db import DataBase
 from dashboard.figure import CreateFigure
 
-TABS_MAPPING = {
-    "add_data": 2,
+TABNAME2IDX = {
+    "add_data": 0,
     "create_figure": 1,
 }
+IDX2TABNAME = {idx: name for name, idx in TABNAME2IDX.items()}
 
 
 class MainWindow(QMainWindow):
@@ -34,17 +35,21 @@ class MainWindow(QMainWindow):
 
         self.resize(800, 600)
         self.tabs = QTabWidget()
-
+        self.tabs.currentChanged.connect(self.tab_click)
         self.init_add_data_tab()
 
-        figure = CreateFigure(self)
-        self.tabs.addTab(figure, "---> Plots <---")
+        self.figure = CreateFigure(self)
+        self.tabs.addTab(self.figure, "---> Plots <---")
 
-        if tab_name not in TABS_MAPPING:
+        if tab_name not in TABNAME2IDX:
             raise ValueError(f"Invalid name of tab: '{tab_name}'")
 
-        QTabWidget.setCurrentIndex(self.tabs, TABS_MAPPING[tab_name])
+        QTabWidget.setCurrentIndex(self.tabs, TABNAME2IDX[tab_name])
         self.setCentralWidget(self.tabs)
+
+    def tab_click(self, i: int):
+        if IDX2TABNAME[i] == "create_figure":
+            self.figure.update_list()
 
     # @property
     # def db(self):
