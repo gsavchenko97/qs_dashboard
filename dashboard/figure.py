@@ -1,7 +1,8 @@
-from typing import Any
+from typing import Any, List
 
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QScrollArea
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (
+    QWidget, QHBoxLayout, QVBoxLayout, QListWidget, QListWidgetItem
+)
 
 from matplotlib.backends.backend_qt5agg import (
     FigureCanvasQTAgg, NavigationToolbar2QT
@@ -16,35 +17,56 @@ class FigureCanvas(FigureCanvasQTAgg):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         super(FigureCanvas, self).__init__(fig)
-        self.axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40])
+        # self.axes.plot([0, 1, 2, 3, 4], [10, 1, 20, 3, 40])
 
+    def update_plot(self, x_values: List, y_values: List, title: str):
+        self.axes.cla()
+        self.axes.plot(x_values, y_values, "r")
+        self.axes.set_title(title)
+        self.draw()
 
 class CreateFigure(QWidget):
     def __init__(self, parent: Any):
         super(CreateFigure, self).__init__()
+        self.parent = parent
+        self.hbox = QHBoxLayout(self)
 
-        db = parent.db
+        lwidget, lvbox = QWidget(), QVBoxLayout()
 
-        hbox = QHBoxLayout(self)
+        self.list_widget = QListWidget()
+        print(self.user_df, self.user_df.columns)
+        self.update_list()
+        self.list_widget.itemClicked.connect(self.plot_figure_clicked)
 
-        scroll, lwidget, lvbox = QScrollArea(), QWidget(), QVBoxLayout()
-        for i in range(1, 50):
-            object = QLabel("TextLabel")
-            lvbox.addWidget(object)
+        lvbox.addWidget(self.list_widget)
         lwidget.setLayout(lvbox)
-        scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        scroll.setWidgetResizable(True)
-        scroll.setWidget(lwidget)
-        hbox.addWidget(scroll)
+        self.hbox.addWidget(lwidget)
 
-        sc = FigureCanvas(width=5, height=4, dpi=100)
-        toolbar = NavigationToolbar2QT(sc, self, coordinates=False)
+        self.figure = FigureCanvas(width=5, height=4, dpi=100)
+        toolbar = NavigationToolbar2QT(self.figure, self, coordinates=False)
         rwidget, rvbox = QWidget(), QVBoxLayout()
         rvbox.addWidget(toolbar)
-        rvbox.addWidget(sc)
+        rvbox.addWidget(self.figure)
         rwidget.setLayout(rvbox)
 
-        hbox.addWidget(rwidget)
+        self.hbox.addWidget(rwidget)
 
         # self.setGeometry(500, 500, 750, 750)
+
+    def update_list(self):
+        self.list_widget.clear()
+        if "measurement_name" in self.user_df.columns:
+            for metric in self.user_df.measurement_name.unique():
+                QListWidgetItem(metric, self.list_widget)
+
+    @property
+    def user_df(self):
+        return self.parent.db.to_dataframe()
+
+    def plot_figure_clicked(self, item):
+        metric = item.text()
+        mask = self.user_df["measurement_name"] == metric
+        local_df = self.user_df[mask]
+        self.figure.update_plot(
+            local_df.day.to_list(), local_df.value.to_list(), metric
+        )
