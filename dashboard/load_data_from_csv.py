@@ -50,6 +50,12 @@ class LoadDataWindow(QDialog):
     def handle_ok(self):
         print(self.filename)
 
+        if len(self.filename) == 0:
+            self.status_lbl.setText(
+                "PLease choose file"
+            )
+            return
+
         df = pd.read_csv(self.filename, sep=",")
         metrics = df["metric"].unique()
         available_metrics = set(self.parent.db.AVAILABLE_METRICS)
