@@ -14,6 +14,9 @@ IDX2TABNAME = {idx: name for name, idx in TABNAME2IDX.items()}
 
 
 class MainWindow(QMainWindow):
+    """
+    MainWindow class. It stores database.
+    """
     switch_window = pyqtSignal()
     show_login_window = pyqtSignal(object)
     show_data_loading_window = pyqtSignal(str, object)

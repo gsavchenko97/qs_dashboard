@@ -48,6 +48,11 @@ class LoadDataWindow(QDialog):
         self.parent = parent
 
     def handle_ok(self):
+        """
+        handles all the process of updateing database and
+        checking correctness of input data
+        :return: None
+        """
         # print(self.filename)
         if len(self.filename) == 0:
             self.status_lbl.setText("PLease choose file")

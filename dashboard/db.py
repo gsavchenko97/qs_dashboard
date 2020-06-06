@@ -12,7 +12,7 @@ import os
 from pathlib import Path
 import pandas as pd
 from dashboard.utils.user import DB_FOLDER, AVAILABLE_METRICS
-from typing import Dict
+from typing import Dict, List, Any
 
 
 def not_empty_db(db: Dict[str, list]) -> bool:
@@ -25,7 +25,11 @@ def not_empty_db(db: Dict[str, list]) -> bool:
     return len(db) > 0 and len(list(db.values())[0])
 
 
-def get_scaled_to_range(values, start_range, end_range):
+def get_scaled_to_range(
+        values: List[Any],
+        start_range: float,
+        end_range: float
+    ):
     """
     Returns list of values scaled to range from start_range to end_range
     :param values: list of values to scale
@@ -63,7 +67,11 @@ class DataBase:
         'euro'
         }
 
-    def __init__(self, username, load_from_saved=True):
+    def __init__(
+            self,
+            username: str,
+            load_from_saved: bool = True
+        ):
         """
         DataBase object initialization
         :param username: user's name
@@ -85,13 +93,23 @@ class DataBase:
             self.metrics_converter = {}
             self.metrics = {}
 
-    def set_db(self, db):
+    def set_db(self, db: Dict[str, List[Any]]):
+        """
+        updates database
+        :param db: new value of database
+        :return: None
+        """
         self.db = db
 
-    def set_metrics(self, metrics):
+    def set_metrics(self, metrics: Dict[str, str]):
+        """
+        updates metrics
+        :param metrics: new value of metrics
+        :return: None
+        """
         self.metrics = metrics
 
-    def save_db(self, path):
+    def save_db(self, path: str):
         """
         saves database state
         :return: None
@@ -99,10 +117,15 @@ class DataBase:
         assert not_empty_db(self.db), 'trying to save empty db'
         json.dump(self.db, open(path, 'w'))
 
-    def save_metrics(self, path):
+    def save_metrics(self, path: str):
+        """
+        Saves metrics to path
+        :param path: path where save
+        :return: None
+        """
         json.dump(self.metrics, open(path, 'w'))
 
-    def load_json(self, path):
+    def load_json(self, path: str):
         """
         loads database from dump
         :return: database from DataBase class
@@ -113,7 +136,7 @@ class DataBase:
             result = {}
         return result
 
-    def save_to_dataframe(self, path):
+    def save_to_dataframe(self, path: str):
         """
         saves database in csv file
         :param path: path to save
@@ -122,12 +145,17 @@ class DataBase:
         df = self.to_dataframe()
         df.to_csv(path, index=False)
 
-    def load_from_df(self, path):
+    def load_from_df(self, path: str):
+        """
+        Returns database and metrics loaded from dataframe
+        :param path: path to dataframe
+        :return: database and metrics
+        """
         df = pd.read_csv(path)
         db, metrics = self.from_dataframe(df, self_init=False)
         return db, metrics
 
-    def load_metrics_converter(self, path):
+    def load_metrics_converter(self, path: str):
         """
         loads saved converter for metrics
         :return: None
@@ -142,7 +170,7 @@ class DataBase:
             result = {}
         return result
 
-    def save_metrics_converter(self, path):
+    def save_metrics_converter(self, path: str):
         """
         saves metrics_converter for metrics from DataBase class
         :return: None
@@ -153,7 +181,13 @@ class DataBase:
             to_save['+'.join(key)] = self.metrics_converter[key]
         json.dump(to_save, open(path, 'w'))
 
-    def add_metrics_convertion(self, from_metric, to_metric, from_value, to_value):
+    def add_metrics_convertion(
+            self,
+            from_metric: str,
+            to_metric: str,
+            from_value: float,
+            to_value: float
+        ):
         """
         adds metrics convert rule to metrics_converter from DataBase class
         :param from_metric: one of the metrics from convert rule
@@ -182,8 +216,8 @@ class DataBase:
 
     def if_metric_convertation_need(
         self,
-        measurement_name,
-        metric
+        measurement_name: str,
+        metric: str
     ):
         """
         check if there is the need to update values of
@@ -248,7 +282,12 @@ class DataBase:
 
         self.db = db
 
-    def convert_values(self, values, from_metric, to_metric):
+    def convert_values(
+            self,
+            values: List[Any],
+            from_metric: str,
+            to_metric: str
+        ):
         """
         converts values according convert rules from metrics_converter from DataBase class
         :param values: values to convert
@@ -260,7 +299,10 @@ class DataBase:
         values = [value * multiply_factor for value in values]
         return values
 
-    def to_dataframe(self, default_value=-1):
+    def to_dataframe(
+            self,
+            default_value: float = -1
+        ):
         """
         converts database and metrics from DataBase class to pandas DataFrame
         :param default_value: value to fill for missing measures
