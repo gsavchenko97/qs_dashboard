@@ -70,8 +70,11 @@ class MainWindow(QMainWindow):
 
         lwidget, lvbox = QWidget(), QVBoxLayout()
         self.list_widget = QListWidget()
+        self.list_widget_conv_rules = QListWidget()
         self.update_metrics_list()
         lvbox.addWidget(self.list_widget)
+        lvbox.addWidget(self.list_widget_conv_rules)
+
         lwidget.setLayout(lvbox)
         self.hbox.addWidget(lwidget)
 
@@ -113,8 +116,21 @@ class MainWindow(QMainWindow):
         self.list_widget.clear()
         df = self.user_df
         if "measurement_name" in df.columns:
-            for metric in df.measurement_name.unique():
-                QListWidgetItem(metric, self.list_widget)
+            for metric in ['Added measurements:'] + \
+                          list(df.measurement_name.unique()):
+                QListWidgetItem(metric, self.list_widget
+                )
+        converter_rules = self.db.metrics_converter
+        QListWidgetItem(
+            f'Added convertation rules:',
+            self.list_widget_conv_rules
+        )
+        for (from_metric, to_metric), val in converter_rules.items():
+            QListWidgetItem(
+                f'{to_metric} / {from_metric} = {round(val, 5)}',
+                self.list_widget_conv_rules
+            )
+
 
     def on_click(self):
         print('Simple Button was pushed')
