@@ -114,8 +114,10 @@ def check_username(username: str) -> Tuple[bool, str]:
 
     if os.path.exists(username_file):
         with open(username_file) as f:
+            user_credentials = [line.strip().split(' ') for line
+                                in f.readlines()]
             existing_username = [
-                user_info for user_info in f.readlines() if
+                user_info for user_info in user_credentials if
                 user_info[0] == username
                 ]
 
