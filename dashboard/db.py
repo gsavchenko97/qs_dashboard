@@ -75,13 +75,15 @@ class DataBase:
         self.username = username
         self.db_path = os.path.join(self.DB_FOLDER, f"database-{username}.json")
         self.metrics_converter_path = os.path.join(self.DB_FOLDER, f"metrics_converter-{username}.json")
+        self.metrics_path = os.path.join(self.DB_FOLDER, f"metrics-{username}.json")
         if load_from_saved:
-            self.db = self.load_db(self.db_path)
+            self.db = self.load_json(self.db_path)
             self.metrics_converter = self.load_metrics_converter(self.metrics_converter_path)
+            self.metrics = self.load_json(self.metrics_path)
         else:
             self.db = {}
             self.metrics_converter = {}
-        self.metrics = {}
+            self.metrics = {}
 
     def set_db(self, db):
         self.db = db
@@ -97,7 +99,10 @@ class DataBase:
         assert not_empty_db(self.db), 'trying to save empty db'
         json.dump(self.db, open(path, 'w'))
 
-    def load_db(self, path):
+    def save_metrics(self, path):
+        json.dump(self.metrics, open(path, 'w'))
+
+    def load_json(self, path):
         """
         loads database from dump
         :return: database from DataBase class

@@ -73,6 +73,8 @@ class LoadDataWindow(QDialog):
             # print(db)
             self.parent.db.set_db(db)
             self.parent.db.set_metrics(metrics)
+            self.parent.db.save_db(self.parent.db.db_path)
+            self.parent.db.save_metrics(self.parent.db.metrics_path)
 
             # print('after:', self.parent.db.db, self.parent.db.metrics)
             self.parent.update_metrics_list()

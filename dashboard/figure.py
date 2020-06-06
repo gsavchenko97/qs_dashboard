@@ -67,6 +67,10 @@ class CreateFigure(QWidget):
         metric = item.text()
         mask = self.user_df["measurement_name"] == metric
         local_df = self.user_df[mask]
+        values = local_df.value.to_list()
+        target_values = [x for x in values if x >=0]
+        mean_value = sum(target_values) / len(target_values)
+        values = [mean_value if x < 0 else x for x in values]
         self.figure.update_plot(
-            local_df.day.to_list(), local_df.value.to_list(), metric
+            local_df.day.to_list(), values, metric
         )
