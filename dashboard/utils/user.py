@@ -13,6 +13,9 @@ MIN_PASSWORD_LENGTH = 2
 
 DB_FOLDER = '.db'
 USERNAME_FILE = 'username_file.txt'  # i know that it is not secure
+DF_COLUMNS = [
+    'username', 'measurement_name', 'value', 'metric', 'day'
+    ]
 
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (

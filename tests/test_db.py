@@ -104,6 +104,7 @@ def check_asserts_for_convert_db_and_metrics_to_csv(database, data_frame):
         database.metrics)
     print(data_frame)
     df = pd.DataFrame(data_frame)
+    # df.to_csv('555.csv', index=False)
 
     assert list(result['username']) == list(df['username'])
     assert list(result['measurement_name']) == list(df['measurement_name'])
