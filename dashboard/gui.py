@@ -114,6 +114,7 @@ class MainWindow(QMainWindow):
 
     def update_metrics_list(self):
         self.list_widget.clear()
+        self.list_widget_conv_rules.clear()
         df = self.user_df
         if "measurement_name" in df.columns:
             for metric in ['Added measurements:'] + \

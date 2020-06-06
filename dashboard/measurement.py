@@ -147,13 +147,13 @@ class MeasurementConvertRuleWindow(QDialog):
 
         self.line_edit_value_from = QLineEdit()
         self.line_edit_value_from.setPlaceholderText('Enter value')
-        self.line_edit_value_from.setMaxLength(3.0)
+        self.line_edit_value_from.setMaxLength(30.0)
         self.line_edit_value_from.setFixedHeight(35)
         layout.addWidget(self.line_edit_value_from, 1, 0, 1, 1)
 
         self.line_edit_value_to = QLineEdit()
         self.line_edit_value_to.setPlaceholderText('Enter value')
-        self.line_edit_value_to.setMaxLength(3.0)
+        self.line_edit_value_to.setMaxLength(30.0)
         self.line_edit_value_to.setFixedHeight(35)
         layout.addWidget(self.line_edit_value_to, 1, 2, 1, 1)
 
