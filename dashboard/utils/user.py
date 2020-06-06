@@ -19,24 +19,25 @@ DF_COLUMNS = [
     "measurement_name", "value", "metric", "day"
 ]
 AVAILABLE_METRICS = {
-    "kg", "gr",
-    "mg", "ton",
-    "km", "m",
-    "cm", "mm",
-    "km ** 2", "m ** 2",
-    "cm ** 2", "mm ** 2",
-    "hour", "minute", "s", "ms",
-    "km ** 3", "m ** 3",
-    "cm ** 3", "mm ** 3", "liter",
-    "ruble", "dollar",
-    "euro"
+    _("kg"), _("gr"),
+    _("mg"), _("ton"),
+    _("km"), _("m"),
+    _("cm"), _("mm"),
+    _("km ** 2"), _("m ** 2"),
+    _("cm ** 2"), _("mm ** 2"),
+    _("hour"), _("minute"), _("s"), _("ms"),
+    _("km ** 3"), _("m ** 3"),
+    _("cm ** 3"), _("mm ** 3"), _("liter"),
+    _("ruble"), _("dollar"),
+    _("euro")
 }
 
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (
-    f"Your password must consist of these characters: "
-    f"{PASSWORD_ALLOWED_CHARS} \n"
-    f"Your password must be at least {MIN_PASSWORD_LENGTH} characters long"
+    _("Your password must consist of these characters: ") +
+    f"{PASSWORD_ALLOWED_CHARS} \n" +
+    _("Your password must be at least") +
+    f"{MIN_PASSWORD_LENGTH}" + _("characters long")
 )
 
 
@@ -103,7 +104,7 @@ def create_new_user(
         with open(username_file, "r") as f:
             username2info = json.load(f)
 
-    assert username not in username2info, f"{username} already exists"
+    assert username not in username2info, f"{username} " + _("already exists")
 
     username2info[username] = {
         "password": password,
@@ -123,7 +124,7 @@ def delete_user(username: str, db_filename: str = USERNAME_FILE) -> NoReturn:
     username_file = DB_FOLDER / db_filename
 
     if not username_file.exists():
-        raise FileNotFoundError(f"{username_file} does not exist")
+        raise FileNotFoundError(f"{username_file}" + _("does not exist"))
 
     with open(username_file, "r") as f:
         username2info = json.load(f)
@@ -149,8 +150,8 @@ def check_password(password: str) -> Tuple[bool, str]:
     if len(password) < MIN_PASSWORD_LENGTH:
         return (
             False,
-            f"Your password must be at least {MIN_PASSWORD_LENGTH} "
-            f"characters long"
+            _("Your password must be at least") + f"{MIN_PASSWORD_LENGTH} " +
+            _("characters long")
         )
 
     if not re.match(rf"^[{PASSWORD_ALLOWED_CHARS}]+$", password):
@@ -175,14 +176,14 @@ def check_username(
     if user_exists(username, db_filename):
         return (
             False,
-            "This username already exists. Please try another one."
+            _("This username already exists. Please try another one.")
         )
 
     if len(username) < MIN_USERNAME_LENGTH:
         return (
             False,
-            f"Your username must be at least {MIN_USERNAME_LENGTH} "
-            f"characters long"
+            _("Your username must be at least") + f"{MIN_USERNAME_LENGTH} " +
+            _("characters long")
         )
 
     return True, ""
@@ -199,8 +200,8 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
     if len(firstname) < MIN_FIRSTNAME_LENGTH:
         return (
             False,
-            f"Your first name must be at least {MIN_FIRSTNAME_LENGTH} "
-            f"characters long"
+            _(f"Your first name must be at least") + f"{MIN_FIRSTNAME_LENGTH} " +
+            _("characters long")
         )
     return True, ""
 
@@ -210,13 +211,13 @@ class User:
         username_file = DB_FOLDER / USERNAME_FILE
 
         if not username_file.exists():
-            raise FileNotFoundError(f"{username_file} does not exist")
+            raise FileNotFoundError(f"{username_file}" + _("does not exist"))
 
         with open(username_file, "r") as f:
             username2info = json.load(f)
 
         if username not in username2info:
-            raise ValueError(f"'{username}' user does not exists")
+            raise ValueError(f"'{username}'" + _("user does not exists"))
 
         info = username2info[username]
         self.username = username
