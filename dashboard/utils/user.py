@@ -3,6 +3,10 @@ import re
 import json
 from typing import Tuple, NoReturn
 from pathlib import Path
+import gettext
+
+data_path = Path(__file__).resolve().parent.parent
+gettext.install("qs_dashboard", data_path)
 
 MAX_USERNAME_LENGTH = 30
 MIN_USERNAME_LENGTH = 2
@@ -150,7 +154,7 @@ def check_password(password: str) -> Tuple[bool, str]:
     if len(password) < MIN_PASSWORD_LENGTH:
         return (
             False,
-            _("Your password must be at least") + f"{MIN_PASSWORD_LENGTH} " +
+            _("Your password must be at least") + f" {MIN_PASSWORD_LENGTH} " +
             _("characters long")
         )
 
@@ -182,7 +186,7 @@ def check_username(
     if len(username) < MIN_USERNAME_LENGTH:
         return (
             False,
-            _("Your username must be at least") + f"{MIN_USERNAME_LENGTH} " +
+            _("Your username must be at least") + f" {MIN_USERNAME_LENGTH} " +
             _("characters long")
         )
 
