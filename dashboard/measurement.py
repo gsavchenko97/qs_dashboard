@@ -1,9 +1,14 @@
 from PyQt5.QtWidgets import (
-    QDialog, QPushButton, QComboBox, QLineEdit, QGridLayout, QLabel
+    QDialog, QPushButton, QComboBox, QLineEdit, QGridLayout, QMessageBox
 )
 from PyQt5.QtCore import pyqtSignal
 
 from dashboard.utils.user import AVAILABLE_METRICS
+import re
+
+
+def check_matching_to_chars(sting_val: str, allowed_char: str) -> bool:
+    return bool(re.match(rf"^[{allowed_char}]+$", sting_val))
 
 
 class MeasurementWindow(QDialog):
@@ -17,6 +22,7 @@ class MeasurementWindow(QDialog):
 
         self.setWindowTitle('Sign Up')
         self.resize(400, 300)
+        self.parent = parent
 
         layout = QGridLayout()
 
@@ -41,7 +47,7 @@ class MeasurementWindow(QDialog):
 
         self.line_edit_day = QLineEdit()
         self.line_edit_day.setPlaceholderText('Enter measurement day')
-        self.line_edit_day.setMaxLength(30)
+        self.line_edit_day.setMaxLength(3.0)
         self.line_edit_day.setFixedHeight(35)
         layout.addWidget(self.line_edit_day, 3, 0, 1, 3)
 
@@ -63,53 +69,112 @@ class MeasurementWindow(QDialog):
         measure_value = self.line_edit_value.text()
         metric = self.acceptabele_metrics.currentText()
         day = self.line_edit_day.text()
-        firstname = self.line_edit_firstname.text()
-        gender = self.gender
 
-        messages = []
-        valid_password, msg_password = check_password(password)
-        if not valid_password:
-            messages.append("Password:")
-            messages.append(self.transform_message(msg_password))
+        allowed_name_chars = "A-Za-z"
+        allowed_value_chars = "0-9."
 
-        valid_username, msg_username = check_username(username)
-        if not valid_username:
-            messages.append("Username:")
-            messages.append(self.transform_message(msg_username))
+        valid_name = check_matching_to_chars(measure_name, allowed_name_chars)
+        valid_value = check_matching_to_chars(measure_value, allowed_value_chars)
+        valid_metric = metric != "-- choose metric --"
+        valid_day = check_matching_to_chars(day, r"\d")
 
-        valid_firstname, msg_firstname = check_firstname(firstname)
-        if not valid_firstname:
-            messages.append("Firstname:")
-            messages.append(self.transform_message(msg_firstname))
+        valid_day = int(day) > 0 if valid_day else False
+        valid_value = float(measure_value) > 0.0 if valid_value else False
 
-        if gender is None:
-            messages.append("Gender:")
-            messages.append(self.transform_message(
-                "Please choose your gender"
-            ))
-
-        create_user_flag = (
-                valid_password and
-                valid_firstname and
-                valid_firstname and
-                valid_username and
-                gender is not None
+        add_measurement_flags = (
+            valid_name and
+            valid_value and
+            valid_metric and
+            valid_day
         )
 
-        if create_user_flag:
-            create_new_user(
-                username=username,
-                password=password,
-                firstname=firstname,
-                gender=gender
-            )
-            self.show_login_window.emit(self)
+        if add_measurement_flags:
+            pass
+            self.close()
+            # self.show_login_window.emit(self)
         else:
             msg_box = QMessageBox()
-            msg_box.setText("\n".join(messages))
+            msg_box.setText("Please fill correct values for:\n"
+                            "days > 0, values > 0, measurement_names:\n"
+                            "[A-Za-z]")
             msg_box.exec_()
 
-    def gender_button_state(self):
-        gender_button = self.sender()
-        if gender_button.isChecked():
-            self.gender = gender_button.gender
+
+class MeasurementConvertRuleWindow(QDialog):
+    """
+    Add metrics convertation rules
+    """
+    show_main_window = pyqtSignal(str, str, object)
+
+    def __init__(self, parent=None):
+        super(MeasurementConvertRuleWindow, self).__init__(parent)
+
+        self.setWindowTitle('Sign Up')
+        self.resize(400, 150)
+        self.parent = parent
+
+        layout = QGridLayout()
+
+        self.acceptabele_metrics_from = QComboBox()
+        self.acceptabele_metrics_from.addItems(['-- choose metric --'] + sorted(AVAILABLE_METRICS))
+        layout.addWidget(self.acceptabele_metrics_from, 0, 0, 1, 2)
+
+        self.acceptabele_metrics_to = QComboBox()
+        self.acceptabele_metrics_to.addItems(['-- choose metric --'] + sorted(AVAILABLE_METRICS))
+        layout.addWidget(self.acceptabele_metrics_to, 0, 1, 1, 2)
+
+        self.line_edit_value_from = QLineEdit()
+        self.line_edit_value_from.setPlaceholderText('Enter value')
+        self.line_edit_value_from.setMaxLength(3.0)
+        self.line_edit_value_from.setFixedHeight(35)
+        layout.addWidget(self.line_edit_value_from, 1, 0, 1, 1)
+
+        self.line_edit_value_to = QLineEdit()
+        self.line_edit_value_to.setPlaceholderText('Enter value')
+        self.line_edit_value_to.setMaxLength(3.0)
+        self.line_edit_value_to.setFixedHeight(35)
+        layout.addWidget(self.line_edit_value_to, 1, 2, 1, 1)
+
+        button_signup = QPushButton('Add rule')
+        button_signup.clicked.connect(self.handle_conv_rule_addition)
+        layout.addWidget(button_signup, 4, 0, 1, 3)
+
+        button_login = QPushButton('Cancel')
+        button_login.clicked.connect(self.handle_cancel)
+        layout.addWidget(button_login, 5, 0, 1, 3)
+
+        self.setLayout(layout)
+
+    def handle_cancel(self):
+        self.close()
+
+    def handle_conv_rule_addition(self):
+        metric_from = self.acceptabele_metrics_from.currentText()
+        metric_to = self.acceptabele_metrics_to.currentText()
+        value_from = self.line_edit_value_from.text()
+        value_to = self.line_edit_value_to.text()
+
+        allowed_value_chars = "0-9."
+
+        valid_pair = metric_from != metric_to
+        valid_values = check_matching_to_chars(value_from, allowed_value_chars)
+        valid_values = float(value_from) > 0 if valid_values else False
+        valid_values = check_matching_to_chars(value_to, allowed_value_chars) if valid_values else False
+        valid_values = float(value_to) if valid_values else False
+
+        add_conv_rule_flags = (
+            valid_pair and
+            valid_values
+        )
+
+        if add_conv_rule_flags:
+            pass
+            self.close()
+            # self.show_login_window.emit(self)
+        else:
+            msg_box = QMessageBox()
+            msg_box.setText("Please fill correct values for:\n"
+                            "metrics sholdn't be the same\n"
+                            "values > 0")
+            msg_box.exec_()
+            self.close()

@@ -3,7 +3,7 @@ from typing import Any
 from dashboard.dialog import DialogWindow
 from dashboard.gui import MainWindow
 from dashboard.login import Login
-from dashboard.measurement import MeasurementWindow
+from dashboard.measurement import MeasurementWindow, MeasurementConvertRuleWindow
 from dashboard.signup import Signup
 from dashboard.load_data_from_csv import LoadDataWindow
 
@@ -67,6 +67,7 @@ class Controller:
             self.show_load_data_window
         )
         self.main_window.show_measurement_adding_window.connect(self.show_add_measurement_window)
+        self.main_window.show_conv_rule_adding_window.connect(self.show_add_conv_rules_window)
         parent_window.close()
         self.main_window.show()
 
@@ -92,3 +93,16 @@ class Controller:
         # if parent_window is not None:
         #     parent_window.close()
         self.add_measurement_window.show()
+
+    def show_add_conv_rules_window(self, parent_window: Any = None):
+        """
+        Opens dialog window for data loading from csv-like file
+        :param parent_window:
+        :param username:
+        :return:
+        """
+        self.add_conv_rules_window = MeasurementConvertRuleWindow(parent=self.main_window)
+        self.add_conv_rules_window.show_main_window.connect(self.show_main_window)
+        # if parent_window is not None:
+        #     parent_window.close()
+        self.add_conv_rules_window.show()

@@ -17,6 +17,7 @@ class MainWindow(QMainWindow):
     show_login_window = pyqtSignal(object)
     show_data_loading_window = pyqtSignal(str, object)
     show_measurement_adding_window = pyqtSignal(object)
+    show_conv_rule_adding_window = pyqtSignal(object)
 
     def __init__(self, username: str, tab_name: str = "add_data"):
         """
@@ -65,16 +66,21 @@ class MainWindow(QMainWindow):
         button.clicked.connect(self.handle_data_loading)
         grid_layout.addWidget(button, 0, 0)
 
-        button = QPushButton("Add Data", self.widget)
+        button = QPushButton("Add Measurement", self.widget)
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_measurement_adding)
         grid_layout.addWidget(button, 1, 0)
+
+        button = QPushButton("Add metrics convertation rule", self.widget)
+        button.setGeometry(QRect(10, 200, 150, 50))
+        button.clicked.connect(self.handle_conv_rule_adding)
+        grid_layout.addWidget(button, 2, 0)
 
         button = QPushButton("Logout", self.widget)
         button.setEnabled(True)
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_logout)
-        grid_layout.addWidget(button, 2, 0)
+        grid_layout.addWidget(button, 3, 0)
 
         self.widget.setLayout(grid_layout)
 
@@ -91,3 +97,6 @@ class MainWindow(QMainWindow):
     def handle_measurement_adding(self):
         print('adding measurement data')
         self.show_measurement_adding_window.emit(self)
+
+    def handle_conv_rule_adding(self):
+        self.show_conv_rule_adding_window.emit(self)
