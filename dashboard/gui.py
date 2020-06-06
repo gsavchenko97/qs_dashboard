@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import pyqtSignal, QRect
 
 from dashboard.db import DataBase
-from dashboard.figure import Figure
+from dashboard.figure import CreateFigure
 
 TABS_MAPPING = {
     "add_data": 2,
@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
 
         self.init_add_data_tab()
 
-        figure = Figure()
+        figure = CreateFigure()
         self.tabs.addTab(figure, "Create Figure")
 
         if tab_name not in TABS_MAPPING:
