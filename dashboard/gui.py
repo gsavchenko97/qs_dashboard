@@ -12,11 +12,7 @@ TABS_MAPPING = {
 }
 
 
-class Figure(QWidget):
-    pass
-
 class MainWindow(QMainWindow):
-
     switch_window = pyqtSignal()
     show_login_window = pyqtSignal(object)
     show_data_loading_window = pyqtSignal(str, object)
@@ -32,14 +28,13 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"QS Dashboard: {username}")
 
         self.username = username
-        self.db = DataBase(username)
 
         self.resize(800, 600)
         self.tabs = QTabWidget()
 
         self.init_add_data_tab()
 
-        figure = CreateFigure()
+        figure = CreateFigure(self)
         self.tabs.addTab(figure, "Create Figure")
 
         if tab_name not in TABS_MAPPING:
@@ -47,6 +42,15 @@ class MainWindow(QMainWindow):
 
         QTabWidget.setCurrentIndex(self.tabs, TABS_MAPPING[tab_name])
         self.setCentralWidget(self.tabs)
+
+    @property
+    def db(self):
+        return DataBase(self.username)
+
+    @db.setter
+    def db(self, database):
+        """If database is changed you need to update it on disk"""
+        raise NotImplementedError()
 
     def init_add_data_tab(self):
         self.add_data_tab = QWidget()
