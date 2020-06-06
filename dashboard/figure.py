@@ -1,10 +1,12 @@
+from typing import Any
+
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QScrollArea
 from PyQt5.QtCore import Qt
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import (
+    FigureCanvasQTAgg, NavigationToolbar2QT
+)
 from matplotlib.figure import Figure
-
-
 import matplotlib
 matplotlib.use('Qt5Agg')
 
@@ -18,23 +20,31 @@ class FigureCanvas(FigureCanvasQTAgg):
 
 
 class CreateFigure(QWidget):
-    def __init__(self):
+    def __init__(self, parent: Any):
         super(CreateFigure, self).__init__()
 
-        hbox = QHBoxLayout(self)
+        db = parent.db
 
-        scroll, widget, vbox = QScrollArea(), QWidget(), QVBoxLayout()
+        hbox = QHBoxLayout(self)g
+
+        scroll, lwidget, lvbox = QScrollArea(), QWidget(), QVBoxLayout()
         for i in range(1, 50):
             object = QLabel("TextLabel")
-            vbox.addWidget(object)
-        widget.setLayout(vbox)
+            lvbox.addWidget(object)
+        lwidget.setLayout(lvbox)
         scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         scroll.setWidgetResizable(True)
-        scroll.setWidget(widget)
+        scroll.setWidget(lwidget)
         hbox.addWidget(scroll)
 
         sc = FigureCanvas(width=5, height=4, dpi=100)
-        hbox.addWidget(sc)
+        toolbar = NavigationToolbar2QT(sc, self, coordinates=False)
+        rwidget, rvbox = QWidget(), QVBoxLayout()
+        rvbox.addWidget(toolbar)
+        rvbox.addWidget(sc)
+        rwidget.setLayout(rvbox)
 
-        self.setGeometry(500, 500, 750, 750)
+        hbox.addWidget(rwidget)
+
+        # self.setGeometry(500, 500, 750, 750)
