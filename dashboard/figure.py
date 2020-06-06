@@ -34,7 +34,6 @@ class CreateFigure(QWidget):
         lwidget, lvbox = QWidget(), QVBoxLayout()
 
         self.list_widget = QListWidget()
-        print(self.user_df, self.user_df.columns)
         self.update_list()
         self.list_widget.itemClicked.connect(self.plot_figure_clicked)
 
@@ -55,8 +54,9 @@ class CreateFigure(QWidget):
 
     def update_list(self):
         self.list_widget.clear()
-        if "measurement_name" in self.user_df.columns:
-            for metric in self.user_df.measurement_name.unique():
+        df = self.user_df
+        if "measurement_name" in df.columns:
+            for metric in df.measurement_name.unique():
                 QListWidgetItem(metric, self.list_widget)
 
     @property
