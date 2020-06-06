@@ -77,10 +77,11 @@ class LoadDataWindow(QDialog):
             db, metrics = convert_csv_to_db_and_metrics(df)
             self.parent.db.db = db
             self.parent.metrics = metrics
-            self.show_main_window.emit(self.username, "add_data", self)
-
+            # self.show_main_window.emit(self.username, "add_data", self)
+            self.close()
     def handle_cancel(self):
-        self.show_main_window.emit(self.username, "add_data", self)
+        # self.show_main_window.emit(self.username, "add_data", self)
+        self.close()
 
     def choose_data_file(self):
         filename, _ = QFileDialog.getOpenFileName(

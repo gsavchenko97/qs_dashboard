@@ -66,6 +66,7 @@ class Controller:
         self.main_window.show_data_loading_window.connect(
             self.show_load_data_window
         )
+        self.main_window.show_measurement_adding_window.connect(self.show_add_measurement_window)
         parent_window.close()
         self.main_window.show()
 
@@ -88,6 +89,6 @@ class Controller:
         """
         self.add_measurement_window = MeasurementWindow(parent=self.main_window)
         self.add_measurement_window.show_main_window.connect(self.show_main_window)
-        if parent_window is not None:
-            parent_window.close()
+        # if parent_window is not None:
+        #     parent_window.close()
         self.add_measurement_window.show()

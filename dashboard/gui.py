@@ -12,6 +12,9 @@ TABS_MAPPING = {
 }
 
 
+class Figure(QWidget):
+    pass
+
 class MainWindow(QMainWindow):
 
     switch_window = pyqtSignal()
