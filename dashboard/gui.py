@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import pyqtSignal, QRect
 
 from dashboard.db import DataBase
-from dashboard.figure import Figure
 
 TABS_MAPPING = {
     "add_data": 2,
@@ -17,6 +16,7 @@ class MainWindow(QMainWindow):
     switch_window = pyqtSignal()
     show_login_window = pyqtSignal(object)
     show_data_loading_window = pyqtSignal(str, object)
+    show_measurement_adding_window = pyqtSignal(object)
 
     def __init__(self, username: str, tab_name: str = "add_data"):
         """
@@ -57,11 +57,29 @@ class MainWindow(QMainWindow):
         button.clicked.connect(self.handle_data_loading)
         grid_layout.addWidget(button, 0, 0)
 
+        button = QPushButton("Add Data", self.widget)
+        button.setGeometry(QRect(10, 200, 150, 50))
+        button.clicked.connect(self.handle_measurement_adding)
+        grid_layout.addWidget(button, 1, 0)
+
+        button = QPushButton("Logout", self.widget)
+        button.setEnabled(True)
+        button.setGeometry(QRect(10, 200, 150, 50))
+        button.clicked.connect(self.handle_logout)
+        grid_layout.addWidget(button, 2, 0)
+
         self.widget.setLayout(grid_layout)
 
     def on_click(self):
         print('Simple Button was pushed')
 
+    def handle_logout(self):
+        self.show_login_window.emit(self)
+
     def handle_data_loading(self):
         print('loading data')
         self.show_data_loading_window.emit(self.username, self)
+
+    def handle_measurement_adding(self):
+        print('adding measurement data')
+        self.show_measurement_adding_window.emit(self)

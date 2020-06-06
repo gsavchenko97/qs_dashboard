@@ -60,9 +60,6 @@ class MeasurementWindow(QDialog):
         self.show_main_window.emit(self)
 
 
-    @staticmethod
-    def transform_message(msg: str) -> str:
-        return "\n".join("        " + m for m in msg.split("\n"))
 
     def gender_button_state(self):
         gender_button = self.sender()
