@@ -261,6 +261,8 @@ class DataBase:
         :param default_value: value to fill for missing measures
         :return: pandas DataFrame constructed from database and metrics
         """
+        if len(self.db) == 0:
+            return pd.DataFrame()
         db = self.db
         metrics = self.metrics
         df = {
@@ -295,9 +297,7 @@ class DataBase:
                 df['metric'].append(metrics[measurement_name])
                 df['day'].append(day)
 
-        df = pd.DataFrame(df)
-
-        return df
+        return pd.DataFrame(df)
 
     def from_dataframe(
             self,
