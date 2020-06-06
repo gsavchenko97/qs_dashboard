@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import pyqtSignal, QRect
 
 from dashboard.db import DataBase
+from dashboard.figure import Figure
 
 TABS_MAPPING = {
     "add_data": 2,
@@ -24,7 +25,7 @@ class MainWindow(QMainWindow):
         :param tab_name: tab that must be opened.
         """
         QMainWindow.__init__(self)
-        self.setWindowTitle("QS Dashboard")
+        self.setWindowTitle(f"QS Dashboard: {username}")
 
         self.username = username
         self.db = DataBase(username)
@@ -33,7 +34,9 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
 
         self.init_add_data_tab()
-        self.init_create_figure_tab()
+
+        figure = Figure()
+        self.tabs.addTab(figure, "Create Figure")
 
         if tab_name not in TABS_MAPPING:
             raise ValueError(f"Invalid name of tab: '{tab_name}'")
@@ -56,22 +59,8 @@ class MainWindow(QMainWindow):
 
         self.widget.setLayout(grid_layout)
 
-    def init_create_figure_tab(self):
-        self.create_figure_tab = QWidget()
-        self.tabs.addTab(self.create_figure_tab, "Create Figure")
-
-        self.widget = QWidget(self.create_figure_tab)
-
-        self.button = QPushButton("Logout", self.widget)
-        self.button.setEnabled(True)
-        self.button.setGeometry(QRect(10, 200, 150, 50))
-        self.button.clicked.connect(self.handle_logout)
-
     def on_click(self):
         print('Simple Button was pushed')
-
-    def handle_logout(self):
-        self.show_login_window.emit(self)
 
     def handle_data_loading(self):
         print('loading data')
