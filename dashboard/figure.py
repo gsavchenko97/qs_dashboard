@@ -25,7 +25,7 @@ class CreateFigure(QWidget):
 
         db = parent.db
 
-        hbox = QHBoxLayout(self)g
+        hbox = QHBoxLayout(self)
 
         scroll, lwidget, lvbox = QScrollArea(), QWidget(), QVBoxLayout()
         for i in range(1, 50):
