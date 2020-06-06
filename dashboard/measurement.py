@@ -110,8 +110,9 @@ class MeasurementWindow(QDialog):
                 metric=metric,
                 day=day
             )
+            self.parent.db.save_db(self.parent.db.db_path)
+            self.parent.db.save_metrics(self.parent.db.metrics_path)
             print('after:', self.parent.db.db, self.parent.db.metrics)
-            # self.show_login_window.emit(self)
         else:
             msg_box = QMessageBox()
             msg_box.setText("Please fill correct values for:\n"
