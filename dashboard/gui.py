@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (
     QPushButton, QMainWindow, QWidget, QGridLayout, QTabWidget,
-    QFileDialog)
+    QFileDialog, QHBoxLayout, QVBoxLayout, QListWidget, QListWidgetItem)
 from PyQt5.QtCore import pyqtSignal, QRect
 
 from dashboard.db import DataBase
@@ -64,37 +64,57 @@ class MainWindow(QMainWindow):
         self.add_data_tab = QWidget()
         self.tabs.addTab(self.add_data_tab, "---> Data <---")
 
-        self.widget = QWidget(self.add_data_tab)
+        # self.widget = QWidget(self.add_data_tab)
 
-        grid_layout = QGridLayout()
+        self.hbox = QHBoxLayout(self.add_data_tab)
 
-        button = QPushButton("Load Data", self.widget)
+        lwidget, lvbox = QWidget(), QVBoxLayout()
+        self.list_widget = QListWidget()
+        self.update_metrics_list()
+        lvbox.addWidget(self.list_widget)
+        lwidget.setLayout(lvbox)
+        self.hbox.addWidget(lwidget)
+
+        rwidget, grid_layout = QWidget(), QGridLayout()
+        button = QPushButton("Load Data")
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_data_loading)
         grid_layout.addWidget(button, 0, 0)
 
-        button = QPushButton("Add Measurement", self.widget)
+        button = QPushButton("Add Measurement")
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_measurement_adding)
         grid_layout.addWidget(button, 1, 0)
 
-        button = QPushButton("Add metrics convertation rule", self.widget)
+        button = QPushButton("Add metrics convertation rule")
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_conv_rule_adding)
         grid_layout.addWidget(button, 2, 0)
 
-        button = QPushButton("Save Data", self.widget)
+        button = QPushButton("Save Data")
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_data_saving)
         grid_layout.addWidget(button, 3, 0)
 
-        button = QPushButton("Logout", self.widget)
+        button = QPushButton("Logout")
         button.setEnabled(True)
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_logout)
         grid_layout.addWidget(button, 4, 0)
 
-        self.widget.setLayout(grid_layout)
+        rwidget.setLayout(grid_layout)
+        self.hbox.addWidget(rwidget)
+
+    @property
+    def user_df(self):
+        return self.db.to_dataframe()
+
+    def update_metrics_list(self):
+        self.list_widget.clear()
+        df = self.user_df
+        if "measurement_name" in df.columns:
+            for metric in df.measurement_name.unique():
+                QListWidgetItem(metric, self.list_widget)
 
     def on_click(self):
         print('Simple Button was pushed')
