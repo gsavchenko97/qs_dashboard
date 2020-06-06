@@ -15,6 +15,7 @@ class LoadDataWindow(QDialog):
 
     def __init__(self, username, parent=None):
         super(LoadDataWindow, self).__init__(parent)
+        self.parent = parent
         self.username = username
         self.filename = ""
 
@@ -47,19 +48,15 @@ class LoadDataWindow(QDialog):
         self.parent = parent
 
     def handle_ok(self):
-        print(self.filename)
-
+        # print(self.filename)
         if len(self.filename) == 0:
-            self.status_lbl.setText(
-                "PLease choose file"
-            )
+            self.status_lbl.setText("PLease choose file")
             return
-        print('before:', self.parent.db.db, self.parent.db.metrics)
+        # print('before:', self.parent.db.db, self.parent.db.metrics)
         df = pd.read_csv(self.filename, sep=",")
         metrics = df["metric"].unique()
         available_metrics = set(self.parent.db.AVAILABLE_METRICS)
         fail = False
-
         if len(set(DF_COLUMNS).difference(set(df.columns))) > 0:
             fail = True
         elif len(set(metrics).difference(available_metrics)) > 0:
@@ -70,14 +67,15 @@ class LoadDataWindow(QDialog):
                 "PLease choose another file with acceptable values"
             )
         else:
-            print(df)
+            # print(df)
             self.parent.db.from_dataframe(df)
             db, metrics = self.parent.db.db, self.parent.db.metrics
-            print(db)
+            # print(db)
             self.parent.db.set_db(db)
             self.parent.db.set_metrics(metrics)
 
-            print('after:', self.parent.db.db, self.parent.db.metrics)
+            # print('after:', self.parent.db.db, self.parent.db.metrics)
+            self.parent.update_metrics_list()
             self.close()
 
     def handle_cancel(self):
