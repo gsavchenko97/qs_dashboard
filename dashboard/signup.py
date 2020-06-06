@@ -99,12 +99,13 @@ class Signup(QDialog):
         msg_box.setText("\n".join(messages))
         msg_box.exec_()
 
-        create_new_user(
-            username=username,
-            password=password,
-            firstname=firstname,
-            gender=gender
-        )
+        if valid_password and valid_firstname and valid_firstname and valid_username and gender is not None:
+            create_new_user(
+                username=username,
+                password=password,
+                firstname=firstname,
+                gender=gender
+            )
 
         self.show_login_window.emit(self)
 

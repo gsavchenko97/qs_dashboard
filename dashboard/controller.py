@@ -59,5 +59,6 @@ class Controller:
         """
         self.main_window = MainWindow(username=username, tab_name=tab_name)
         self.main_window.switch_window.connect(self.show_dialog_window)
+        self.main_window.show_login_window.connect(self.show_login_window)
         parent_window.close()
         self.main_window.show()

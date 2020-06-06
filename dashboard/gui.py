@@ -14,6 +14,7 @@ TABS_MAPPING = {
 class MainWindow(QMainWindow):
 
     switch_window = pyqtSignal()
+    show_login_window = pyqtSignal(object)
 
     def __init__(self, username: str, tab_name: str = "add_data"):
         """
@@ -57,10 +58,13 @@ class MainWindow(QMainWindow):
 
         self.widget = QWidget(self.create_figure_tab)
 
-        self.button = QPushButton("Simple Button", self.widget)
+        self.button = QPushButton("Logout", self.widget)
         self.button.setEnabled(True)
         self.button.setGeometry(QRect(10, 200, 150, 50))
-        self.button.clicked.connect(self.on_click)
+        self.button.clicked.connect(self.handle_logout)
 
     def on_click(self):
         print('Simple Button was pushed')
+
+    def handle_logout(self):
+        self.show_login_window.emit(self)

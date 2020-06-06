@@ -26,13 +26,13 @@ class Login(QDialog):
         self.line_edit_username.setPlaceholderText('Username')
         self.line_edit_username.setMaxLength(MAX_USERNAME_LENGTH)
         self.line_edit_username.setFixedHeight(35)
-        layout.addWidget(self.line_edit_username, 0, 0, 1, 2)
+        layout.addWidget(self.line_edit_username, 0, 0, 1, 3)
 
         self.line_edit_password = QLineEdit()
         self.line_edit_password.setPlaceholderText('Password')
         self.line_edit_password.setMaxLength(MAX_PASSWORD_LENGTH)
         self.line_edit_password.setFixedHeight(35)
-        layout.addWidget(self.line_edit_password, 1, 0, 1, 2)
+        layout.addWidget(self.line_edit_password, 1, 0, 1, 3)
 
         button_login = QPushButton('Log In')
         button_login.clicked.connect(self.handle_login)
@@ -41,6 +41,10 @@ class Login(QDialog):
         button_signup = QPushButton('Sign Up')
         button_signup.clicked.connect(self.handle_signup)
         layout.addWidget(button_signup, 2, 1, 1, 1)
+
+        button_signup = QPushButton('Exit')
+        button_signup.clicked.connect(self.handle_exit)
+        layout.addWidget(button_signup, 2, 2, 1, 1)
 
         self.setLayout(layout)
 
@@ -60,3 +64,6 @@ class Login(QDialog):
 
     def handle_signup(self):
         self.show_signup_window.emit(self)
+
+    def handle_exit(self):
+        self.close()

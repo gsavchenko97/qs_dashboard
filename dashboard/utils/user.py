@@ -110,7 +110,7 @@ def check_username(username: str) -> Tuple[bool, str]:
             )
 
     username_file = os.path.join(DB_FOLDER, USERNAME_FILE)
-    result = (False, "This username is already in use. Please try another one.")
+    result = (True, "")
 
     if os.path.exists(username_file):
         with open(username_file) as f:
@@ -119,8 +119,8 @@ def check_username(username: str) -> Tuple[bool, str]:
                 user_info[0] == username
                 ]
 
-        if len(existing_username) == 0:
-            result = (True, "")
+        if len(existing_username) > 0:
+            result = (False, "This username is already in use. Please try another one.")
 
     return result
 
