@@ -99,13 +99,12 @@ class Signup(QDialog):
         msg_box.setText("\n".join(messages))
         msg_box.exec_()
 
-        # TODO: Create a new user with the given information
-        # create_new_user(
-        #     username=username,
-        #     password=password,
-        #     firstname=firstname,
-        #     gender=gender
-        # )
+        create_new_user(
+            username=username,
+            password=password,
+            firstname=firstname,
+            gender=gender
+        )
 
         self.show_login_window.emit(self)
 
