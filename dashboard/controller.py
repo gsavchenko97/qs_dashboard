@@ -4,12 +4,14 @@ from dashboard.dialog import DialogWindow
 from dashboard.gui import MainWindow
 from dashboard.login import Login
 from dashboard.signup import Signup
+from dashboard.load_data_from_csv import LoadDataWindow
 
 
 class Controller:
     """
     Allows to manage multiple windows of the application
     """
+
     def show_login_window(self, parent_window: Any = None):
         """
         Opens log in window and closes the parent window.
@@ -47,7 +49,7 @@ class Controller:
 
     def show_main_window(
             self, username: str, tab_name: str, parent_window: Any
-    ):
+            ):
         """
         Opens main window and closes the parent window.
         The parent window must be closed to avoid a situation
@@ -60,5 +62,20 @@ class Controller:
         self.main_window = MainWindow(username=username, tab_name=tab_name)
         self.main_window.switch_window.connect(self.show_dialog_window)
         self.main_window.show_login_window.connect(self.show_login_window)
+        self.main_window.show_data_loading_window.connect(self.show_load_data_window)
         parent_window.close()
         self.main_window.show()
+
+    def show_load_data_window(
+            self, username: str, parent_window: Any
+            ):
+
+        """
+        Opens dialog window for data loading from csv-like file
+        :param username:
+        :param parent_window:
+        :return:
+        """
+        self.load_data_window = LoadDataWindow(username=username)
+        self.load_data_window.show_main_window.connect(self.show_main_window)
+        self.load_data_window.show()

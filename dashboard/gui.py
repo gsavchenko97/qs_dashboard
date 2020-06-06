@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
 
     switch_window = pyqtSignal()
     show_login_window = pyqtSignal(object)
+    show_data_loading_window = pyqtSignal(str, object)
 
     def __init__(self, username: str, tab_name: str = "add_data"):
         """
@@ -47,10 +48,13 @@ class MainWindow(QMainWindow):
         self.widget = QWidget(self.add_data_tab)
 
         grid_layout = QGridLayout()
-        self.widget.setLayout(grid_layout)
 
-        button = QPushButton("Grid Button")
+        button = QPushButton("Load Data", self.widget)
+        button.setGeometry(QRect(10, 200, 150, 50))
+        button.clicked.connect(self.handle_data_loading)
         grid_layout.addWidget(button, 0, 0)
+
+        self.widget.setLayout(grid_layout)
 
     def init_create_figure_tab(self):
         self.create_figure_tab = QWidget()
@@ -68,3 +72,7 @@ class MainWindow(QMainWindow):
 
     def handle_logout(self):
         self.show_login_window.emit(self)
+
+    def handle_data_loading(self):
+        print('loading data')
+        self.show_data_loading_window.emit(self.username, self)

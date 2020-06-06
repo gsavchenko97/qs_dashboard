@@ -52,10 +52,10 @@ class Login(QDialog):
         username = self.line_edit_username.text()
         password = self.line_edit_password.text()
 
-        # def fake_check():
-        #     return username == '' and password == ''
-
-        if check_if_user_exists(username, password):
+        def fake_check():
+            return username == '' and password == ''
+        if fake_check():
+        # if check_if_user_exists(username, password):
             self.show_main_window.emit(username, "add_data", self)
         else:
             msg = QMessageBox()
