@@ -16,7 +16,7 @@ MIN_PASSWORD_LENGTH = 2
 DB_FOLDER = Path(__file__).resolve().parent.parent.parent / ".db"
 USERNAME_FILE = "users.json"  # i know that it is not secure
 DF_COLUMNS = [
-    "username", "measurement_name", "value", "metric", "day"
+    "measurement_name", "value", "metric", "day"
 ]
 AVAILABLE_METRICS = {
     "kg", "gr",

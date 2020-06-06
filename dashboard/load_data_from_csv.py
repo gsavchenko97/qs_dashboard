@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import pyqtSignal
 import pandas as pd
 
-from dashboard.db import convert_csv_to_db_and_metrics
 from dashboard.utils.user import DF_COLUMNS
 
 
@@ -41,7 +40,7 @@ class LoadDataWindow(QDialog):
         self.cancel_btn.clicked.connect(self.handle_cancel)
         layout.addWidget(self.cancel_btn, 3, 2, 1, 1)
 
-        self.setWindowTitle("Choose file")
+        self.setWindowTitle("Load file")
         self.resize(400, 80)
 
         self.setLayout(layout)
@@ -61,9 +60,6 @@ class LoadDataWindow(QDialog):
         available_metrics = set(self.parent.db.AVAILABLE_METRICS)
         fail = False
 
-        # print(len(set(metrics).difference(available_metrics)))
-        # print(df.columns, DF_COLUMNS)
-
         if len(set(DF_COLUMNS).difference(set(df.columns))) > 0:
             fail = True
         elif len(set(metrics).difference(available_metrics)) > 0:
@@ -74,16 +70,17 @@ class LoadDataWindow(QDialog):
                 "PLease choose another file with acceptable values"
             )
         else:
-            db, metrics = convert_csv_to_db_and_metrics(df)
+            print(df)
+            self.parent.db.from_dataframe(df)
+            db, metrics = self.parent.db.db, self.parent.db.metrics
             print(db)
             self.parent.db.set_db(db)
             self.parent.db.set_metrics(metrics)
-            # self.show_main_window.emit(self.username, "add_data", self)
+
             print('after:', self.parent.db.db, self.parent.db.metrics)
             self.close()
 
     def handle_cancel(self):
-        # self.show_main_window.emit(self.username, "add_data", self)
         self.close()
 
     def choose_data_file(self):

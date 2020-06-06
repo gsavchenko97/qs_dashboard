@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (
-    QPushButton, QMainWindow, QWidget, QGridLayout, QTabWidget
-)
+    QPushButton, QMainWindow, QWidget, QGridLayout, QTabWidget,
+    QFileDialog)
 from PyQt5.QtCore import pyqtSignal, QRect
 
 from dashboard.db import DataBase
@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
     switch_window = pyqtSignal()
     show_login_window = pyqtSignal(object)
     show_data_loading_window = pyqtSignal(str, object)
+    show_data_saving_window = pyqtSignal(str, object)
     show_measurement_adding_window = pyqtSignal(object)
     show_conv_rule_adding_window = pyqtSignal(object)
 
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
         self.init_add_data_tab()
 
         figure = CreateFigure(self)
-        self.tabs.addTab(figure, "Create Figure")
+        self.tabs.addTab(figure, "---> Plots <---")
 
         if tab_name not in TABS_MAPPING:
             raise ValueError(f"Invalid name of tab: '{tab_name}'")
@@ -56,7 +57,7 @@ class MainWindow(QMainWindow):
 
     def init_add_data_tab(self):
         self.add_data_tab = QWidget()
-        self.tabs.addTab(self.add_data_tab, "Add Data")
+        self.tabs.addTab(self.add_data_tab, "---> Data <---")
 
         self.widget = QWidget(self.add_data_tab)
 
@@ -77,11 +78,16 @@ class MainWindow(QMainWindow):
         button.clicked.connect(self.handle_conv_rule_adding)
         grid_layout.addWidget(button, 2, 0)
 
+        button = QPushButton("Save Data", self.widget)
+        button.setGeometry(QRect(10, 200, 150, 50))
+        button.clicked.connect(self.handle_data_saving)
+        grid_layout.addWidget(button, 3, 0)
+
         button = QPushButton("Logout", self.widget)
         button.setEnabled(True)
         button.setGeometry(QRect(10, 200, 150, 50))
         button.clicked.connect(self.handle_logout)
-        grid_layout.addWidget(button, 3, 0)
+        grid_layout.addWidget(button, 4, 0)
 
         self.widget.setLayout(grid_layout)
 
@@ -94,6 +100,19 @@ class MainWindow(QMainWindow):
     def handle_data_loading(self):
         print('loading data')
         self.show_data_loading_window.emit(self.username, self)
+
+    def handle_data_saving(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        filename, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save file",
+            "",
+            "All Files (*);;Text Files (*.txt)", options=options
+        )
+        if filename:
+            print('saving data to', filename)
+            self.db.save_to_dataframe(filename)
 
     def handle_measurement_adding(self):
         print('adding measurement data')
