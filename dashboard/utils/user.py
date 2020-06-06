@@ -27,14 +27,19 @@ PASSWORD_REQUIREMENTS = (
 )
 
 
-def match_username_password(username: str, password: str) -> bool:
+def match_username_password(
+    username: str,
+    password: str,
+    db_filename: str = USERNAME_FILE
+) -> bool:
     """
     Check whether the user with the given username and password exists
     :param username:
     :param password:
+    :param db_filename:
     :return: True if the user exists otherwise False
     """
-    username_file = DB_FOLDER / USERNAME_FILE
+    username_file = DB_FOLDER / db_filename
     if username_file.exists():
         with open(username_file, "r") as f:
             username2info = json.load(f)
@@ -45,13 +50,14 @@ def match_username_password(username: str, password: str) -> bool:
     return False
 
 
-def check_if_user_exists(username: str) -> bool:
+def user_exists(username: str, db_filename: str = USERNAME_FILE) -> bool:
     """
     Check whether the user with the given username exists
     :param username: username
+    :param db_filename:
     :return: True if the user exists otherwise False
     """
-    username_file = DB_FOLDER / USERNAME_FILE
+    username_file = DB_FOLDER / db_filename
     if username_file.exists():
         with open(username_file, "r") as f:
             username2info = json.load(f)
@@ -65,6 +71,7 @@ def create_new_user(
     password: str,
     firstname: str,
     gender: str,
+    db_filename: str = USERNAME_FILE,
 ) -> NoReturn:
     """
     Adds to database a new user with given information
@@ -72,10 +79,11 @@ def create_new_user(
     :param password: password to use in signing process
     :param firstname: firstname of the user
     :param gender: gender of the user
+    :param db_filename:
     """
     os.makedirs(DB_FOLDER, exist_ok=True)
 
-    username_file = DB_FOLDER / USERNAME_FILE
+    username_file = DB_FOLDER / db_filename
 
     username2info = dict()
     if username_file.exists():
@@ -89,17 +97,17 @@ def create_new_user(
         "firstname": firstname,
         "gender": gender,
     }
-
     with open(username_file, "w") as f:
         json.dump(username2info, f)
 
 
-def delete_user(username: str) -> NoReturn:
+def delete_user(username: str, db_filename: str = USERNAME_FILE) -> NoReturn:
     """
     Deletes the user from the database
     :param username: username
+    :param db_filename: username
     """
-    username_file = DB_FOLDER / USERNAME_FILE
+    username_file = DB_FOLDER / db_filename
 
     if not username_file.exists():
         raise FileNotFoundError(f"{username_file} does not exist")
@@ -109,6 +117,11 @@ def delete_user(username: str) -> NoReturn:
 
     del username2info[username]
 
+    if len(username2info) == 0:
+        os.remove(username_file)
+    else:
+        with open(username_file, "w") as f:
+            json.dump(username2info, f)
 
 
 def check_password(password: str) -> Tuple[bool, str]:
@@ -133,16 +146,20 @@ def check_password(password: str) -> Tuple[bool, str]:
     return True, ""
 
 
-def check_username(username: str) -> Tuple[bool, str]:
+def check_username(
+    username: str,
+    db_filename: str = USERNAME_FILE
+) -> Tuple[bool, str]:
     """
     Checks if the given username already exists or it uses incorrect characters
     :param username: string from user
+    :param db_filename:
     :return:
         flag: True if the username does not exist and it is correct
         message: what the user must change in the written username
     """
 
-    if check_if_user_exists(username):
+    if user_exists(username, db_filename):
         return (
             False,
             "This username already exists. Please try another one."
@@ -173,3 +190,22 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
             f"characters long"
         )
     return True, ""
+
+
+class User:
+    def __init__(self, username: str):
+        username_file = DB_FOLDER / USERNAME_FILE
+
+        if not username_file.exists():
+            raise FileNotFoundError(f"{username_file} does not exist")
+
+        with open(username_file, "r") as f:
+            username2info = json.load(f)
+
+        if username not in username2info:
+            raise ValueError(f"'{username}' user does not exists")
+
+        info = username2info[username]
+        self.username = username
+        self.firstname = info["firstname"]
+        self.gender = info["gender"]
