@@ -28,7 +28,28 @@ def database():
 
 
 @pytest.fixture
+def database_with_skipped_days():
+    database = DataBase('user_x', False)
+
+    database.add_measurement('measurement_x', 1, 'gr', 1)
+    database.add_measurement('measurement_y', 4, 'kg', 1)
+    database.add_metrics_convertion('gr', 'kg', 1000, 1)
+    database.add_measurement('measurement_x', 0.002, 'kg', 3)
+    database.add_measurement('measurement_y', 3, 'kg', 3)
+
+    return database
+
+
+@pytest.fixture
 def metrics():
+    return {
+        'measurement_x': 'kg',
+        'measurement_y': 'kg'
+        }
+
+
+@pytest.fixture
+def metrics_with_skipped_days():
     return {
         'measurement_x': 'kg',
         'measurement_y': 'kg'
@@ -49,6 +70,20 @@ def csv_data_frame():
     return pd.DataFrame(csv)
 
 
+csv_with_skipped_days = {
+    'username': ['user_x'] * 6,
+    'measurement_name': ['measurement_x'] * 3 + ['measurement_y'] * 3,
+    'value': [0.001, -1, 0.002, 4, -1, 3],
+    'metric': ['kg'] * 6,
+    'day': [1, 2, 3, 1, 2, 3]
+    }
+
+
+@pytest.fixture
+def csv_data_frame_with_skipped_days():
+    return pd.DataFrame(csv_with_skipped_days)
+
+
 def test_not_empty_db(empty_db, non_empty_db):
     result = not_empty_db(empty_db)
     assert not result, 'empty_db is not empty'
@@ -63,11 +98,13 @@ def test_get_scaled_to_range():
     assert result == reference, 'values scaled to [0, 1] the wrong way'
 
 
-def test_convert_db_and_metrics_to_csv(database):
-    result = convert_db_and_metrics_to_csv(database.db, database.metrics)
-    df = pd.DataFrame(csv)
-    print(df)
-    print(result)
+def check_asserts_for_convert_db_and_metrics_to_csv(database, data_frame):
+    result = convert_db_and_metrics_to_csv(
+        database.db,
+        database.metrics)
+    print(data_frame)
+    df = pd.DataFrame(data_frame)
+
     assert list(result['username']) == list(df['username'])
     assert list(result['measurement_name']) == list(df['measurement_name'])
     assert list(result['value']) == list(df['value'])
@@ -75,7 +112,23 @@ def test_convert_db_and_metrics_to_csv(database):
     assert list(result['day']) == list(df['day'])
 
 
-def test_convert_csv_to_db_and_metrics(csv_data_frame, metrics):
+def test_convert_db_and_metrics_to_csv(database, database_with_skipped_days):
+    check_asserts_for_convert_db_and_metrics_to_csv(
+        database=database,
+        data_frame=csv
+
+        )
+
+    check_asserts_for_convert_db_and_metrics_to_csv(
+        database=database_with_skipped_days,
+        data_frame=csv_with_skipped_days)
+
+
+def test_convert_csv_to_db_and_metrics(
+        csv_data_frame,
+        metrics,
+        csv_data_frame_with_skipped_days,
+        metrics_with_skipped_days):
     result_db, result_metrics = \
         convert_csv_to_db_and_metrics(csv_data_frame)
     reference_db = {
@@ -92,6 +145,19 @@ def test_convert_csv_to_db_and_metrics(csv_data_frame, metrics):
     print(metrics)
     assert result_db == reference_db
     assert result_metrics == metrics
+
+    result_db, result_metrics = \
+        convert_csv_to_db_and_metrics(csv_data_frame_with_skipped_days)
+    reference_db = {
+        'user_x': {
+            'measurement_x': [0.001, 0.002],
+            'measurement_x_days': [1, 3],
+            'measurement_y': [4, 3],
+            'measurement_y_days': [1, 3],
+            }
+        }
+    assert result_db == reference_db
+    assert result_metrics == metrics_with_skipped_days
 
 
 def test_metrics_convertion(database):
