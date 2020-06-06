@@ -65,9 +65,11 @@ class MeasurementWindow(QDialog):
         self.close()
 
     def handle_measurement_addition(self):
+        print('before:', self.parent.db.db, self.parent.db.metrics)
         measure_name = self.line_edit_measure_name.text()
         measure_value = self.line_edit_value.text()
         metric = self.acceptabele_metrics.currentText()
+
         day = self.line_edit_day.text()
 
         allowed_name_chars = "A-Za-z"
@@ -88,9 +90,27 @@ class MeasurementWindow(QDialog):
             valid_day
         )
 
-        if add_measurement_flags:
-            pass
-            self.close()
+        print([key[0] for key in self.parent.db.metrics_converter.keys()])
+
+        should_convert, from_metric = self.parent.db.if_metric_convertation_need(
+            measure_name,
+            metric)
+        convertation_rule_exist = (from_metric, metric) in self.parent.db.metrics_converter.keys()
+        if should_convert and not convertation_rule_exist:
+            msg_box = QMessageBox()
+            msg_box.setText("Please try first to add convertation rule\n"
+                            f"from {from_metric} to {metric}")
+            msg_box.exec_()
+        elif add_measurement_flags:
+            measure_value = float(measure_value)
+            day = int(day)
+            self.parent.db.add_measurement(
+                measurement_name=measure_name,
+                value=measure_value,
+                metric=metric,
+                day=day
+            )
+            print('after:', self.parent.db.db, self.parent.db.metrics)
             # self.show_login_window.emit(self)
         else:
             msg_box = QMessageBox()
@@ -98,6 +118,7 @@ class MeasurementWindow(QDialog):
                             "days > 0, values > 0, measurement_names:\n"
                             "[A-Za-z]")
             msg_box.exec_()
+        self.close()
 
 
 class MeasurementConvertRuleWindow(QDialog):
@@ -167,8 +188,12 @@ class MeasurementConvertRuleWindow(QDialog):
             valid_values
         )
 
+        print('before', self.parent.db.db, self.parent.db.metrics_converter)
         if add_conv_rule_flags:
-            pass
+            value_from = float(value_from)
+            value_to = float(value_to)
+            self.parent.db.add_metrics_convertion(metric_from, metric_to, value_from, value_to)
+            print('before', self.parent.db.db, self.parent.db.metrics_converter)
             self.close()
             # self.show_login_window.emit(self)
         else:

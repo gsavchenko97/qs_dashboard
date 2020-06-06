@@ -150,6 +150,18 @@ class DataBase:
             self.metrics_converter = {}
         self.metrics = {}
 
+    def set_db(self, db):
+        # self.db = {}
+        # print(db)
+        # for username in db:
+        #     self.db[username] = {}
+        #     for measurement_name in db[username]:
+        #         self.db[username] = db[username][measurement_name]
+        self.db = db
+
+    def set_metrics(self, metrics):
+        self.metrics = metrics
+
     def save_db(self):
         """
         saves database state
@@ -224,6 +236,19 @@ class DataBase:
         self.db[self.username] = {}
         self.save_db()
 
+    def if_metric_convertation_need(
+        self,
+        measurement_name,
+        metric
+    ):
+        should_convert = False
+        from_metric = metric
+        if measurement_name in self.metrics and self.metrics[measurement_name] != metric:
+            should_convert = True
+            from_metric = self.metrics[measurement_name]
+
+        return should_convert, from_metric
+
     def add_measurement(self, measurement_name, value, metric, day):
         """
         adds measurement result to database
@@ -234,12 +259,16 @@ class DataBase:
         :return: None
         """
         assert value >= 0, 'trying to add negative value'
-        should_convert = False
-        from_metric = metric
+
         successfully_converted = True
-        if measurement_name in self.metrics and self.metrics[measurement_name] != metric:
-            should_convert = True
-            from_metric = self.metrics[measurement_name]
+
+        should_convert, from_metric = self.if_metric_convertation_need(
+            measurement_name,
+            metric)
+
+        # if measurement_name in self.metrics and self.metrics[measurement_name] != metric:
+        #     should_convert = True
+        #     from_metric = self.metrics[measurement_name]
 
         if self.username not in self.db:
             self.db[self.username] = {}

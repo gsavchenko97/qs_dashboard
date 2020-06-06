@@ -29,6 +29,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"QS Dashboard: {username}")
 
         self.username = username
+        self.db = DataBase(username=username)
 
         self.resize(800, 600)
         self.tabs = QTabWidget()
@@ -44,14 +45,14 @@ class MainWindow(QMainWindow):
         QTabWidget.setCurrentIndex(self.tabs, TABS_MAPPING[tab_name])
         self.setCentralWidget(self.tabs)
 
-    @property
-    def db(self):
-        return DataBase(self.username)
-
-    @db.setter
-    def db(self, database):
-        """If database is changed you need to update it on disk"""
-        raise NotImplementedError()
+    # @property
+    # def db(self):
+    #     return DataBase(self.username)
+    #
+    # @db.setter
+    # def db(self, database):
+    #     """If database is changed you need to update it on disk"""
+    #     raise NotImplementedError()
 
     def init_add_data_tab(self):
         self.add_data_tab = QWidget()

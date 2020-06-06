@@ -69,6 +69,7 @@ class Controller:
         self.main_window.show_measurement_adding_window.connect(self.show_add_measurement_window)
         self.main_window.show_conv_rule_adding_window.connect(self.show_add_conv_rules_window)
         parent_window.close()
+        # print("db and metrics", self.main_window.db.db, self.main_window.db.metrics)
         self.main_window.show()
 
     def show_load_data_window(self, username: str):

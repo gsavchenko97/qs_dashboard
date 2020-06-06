@@ -55,14 +55,14 @@ class LoadDataWindow(QDialog):
                 "PLease choose file"
             )
             return
-
+        print('before:', self.parent.db.db, self.parent.db.metrics)
         df = pd.read_csv(self.filename, sep=",")
         metrics = df["metric"].unique()
         available_metrics = set(self.parent.db.AVAILABLE_METRICS)
         fail = False
 
-        print(len(set(metrics).difference(available_metrics)))
-        print(df.columns, DF_COLUMNS)
+        # print(len(set(metrics).difference(available_metrics)))
+        # print(df.columns, DF_COLUMNS)
 
         if len(set(DF_COLUMNS).difference(set(df.columns))) > 0:
             fail = True
@@ -75,10 +75,13 @@ class LoadDataWindow(QDialog):
             )
         else:
             db, metrics = convert_csv_to_db_and_metrics(df)
-            self.parent.db.db = db
-            self.parent.metrics = metrics
+            print(db)
+            self.parent.db.set_db(db)
+            self.parent.db.set_metrics(metrics)
             # self.show_main_window.emit(self.username, "add_data", self)
+            print('after:', self.parent.db.db, self.parent.db.metrics)
             self.close()
+
     def handle_cancel(self):
         # self.show_main_window.emit(self.username, "add_data", self)
         self.close()
