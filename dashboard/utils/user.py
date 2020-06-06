@@ -18,6 +18,19 @@ USERNAME_FILE = "users.json"  # i know that it is not secure
 DF_COLUMNS = [
     "username", "measurement_name", "value", "metric", "day"
 ]
+AVAILABLE_METRICS = {
+    "kg", "gr",
+    "mg", "ton",
+    "km", "m",
+    "cm", "mm",
+    "km ** 2", "m ** 2",
+    "cm ** 2", "mm ** 2",
+    "hour", "minute", "s", "ms",
+    "km ** 3", "m ** 3",
+    "cm ** 3", "mm ** 3", "liter",
+    "ruble", "dollar",
+    "euro"
+}
 
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (

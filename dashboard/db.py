@@ -11,7 +11,7 @@ import json
 import os
 from pathlib import Path
 import pandas as pd
-from dashboard.utils.user import DB_FOLDER
+from dashboard.utils.user import DB_FOLDER, AVAILABLE_METRICS
 from typing import Dict
 
 
@@ -136,6 +136,7 @@ class DataBase:
         :param username: user's name
         """
         self.DB_FOLDER = DB_FOLDER
+        self.AVAILABLE_METRICS = AVAILABLE_METRICS
         if not os.path.exists(DB_FOLDER):
             os.makedirs(DB_FOLDER, exist_ok=True)
         self.username = username

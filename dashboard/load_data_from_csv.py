@@ -22,7 +22,7 @@ class LoadDataWindow(QDialog):
         layout = QGridLayout()
 
         self.description_lbl = QLabel(
-            "Choose csv-like file to download to download data from:"
+            "Choose csv-like file to download data from:"
         )
         layout.addWidget(self.description_lbl, 0, 0, 1, 3)
 
@@ -52,7 +52,7 @@ class LoadDataWindow(QDialog):
 
         df = pd.read_csv(self.filename, sep=",")
         metrics = df["metric"].unique()
-        available_metrics = set(self.parent.AVAILABLE_METRICS)
+        available_metrics = set(self.parent.db.AVAILABLE_METRICS)
         fail = False
 
         print(len(set(metrics).difference(available_metrics)))

@@ -74,6 +74,6 @@ class Controller:
         :param username:
         :return:
         """
-        self.load_data_window = LoadDataWindow(username=username)
+        self.load_data_window = LoadDataWindow(username=username, parent=self.main_window)
         self.load_data_window.show_main_window.connect(self.show_main_window)
         self.load_data_window.show()
