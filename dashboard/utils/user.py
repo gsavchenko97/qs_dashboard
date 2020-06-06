@@ -1,6 +1,7 @@
 import os
 import re
-from typing import Tuple
+import json
+from typing import Tuple, NoReturn
 from pathlib import Path
 
 MAX_USERNAME_LENGTH = 30
@@ -13,7 +14,7 @@ MAX_PASSWORD_LENGTH = 30
 MIN_PASSWORD_LENGTH = 2
 
 DB_FOLDER = Path(__file__).resolve().parent.parent.parent / ".db"
-USERNAME_FILE = "username_file.txt"  # i know that it is not secure
+USERNAME_FILE = "users.json"  # i know that it is not secure
 DF_COLUMNS = [
     "username", "measurement_name", "value", "metric", "day"
 ]
@@ -26,7 +27,7 @@ PASSWORD_REQUIREMENTS = (
 )
 
 
-def check_if_user_exists(username: str, password: str) -> bool:
+def match_username_password(username: str, password: str) -> bool:
     """
     Check whether the user with the given username and password exists
     :param username:
@@ -35,15 +36,27 @@ def check_if_user_exists(username: str, password: str) -> bool:
     """
     username_file = DB_FOLDER / USERNAME_FILE
     if username_file.exists():
-        with open(username_file, 'r') as f:
-            user_credentials = [
-                line.strip().split(' ') for line in f.readlines()
-            ]
-            matched_users = [
-                user_info for user_info in user_credentials if
-                user_info[0] == username and user_info[1] == password
-            ]
-            return len(matched_users) > 0
+        with open(username_file, "r") as f:
+            username2info = json.load(f)
+        if username not in username2info:
+            return False
+        if username2info[username]["password"] == password:
+            return True
+    return False
+
+
+def check_if_user_exists(username: str) -> bool:
+    """
+    Check whether the user with the given username exists
+    :param username: username
+    :return: True if the user exists otherwise False
+    """
+    username_file = DB_FOLDER / USERNAME_FILE
+    if username_file.exists():
+        with open(username_file, "r") as f:
+            username2info = json.load(f)
+        if username in username2info:
+            return True
     return False
 
 
@@ -52,23 +65,50 @@ def create_new_user(
     password: str,
     firstname: str,
     gender: str,
-) -> None:
+) -> NoReturn:
     """
-    Adds to database new user with given information
+    Adds to database a new user with given information
     :param username: username or login
     :param password: password to use in signing process
     :param firstname: firstname of the user
     :param gender: gender of the user
-    :return: None
     """
-
     os.makedirs(DB_FOLDER, exist_ok=True)
+
     username_file = DB_FOLDER / USERNAME_FILE
-    open_mode = "w"
+
+    username2info = dict()
     if username_file.exists():
-        open_mode = "a"
-    with open(username_file, open_mode) as f:
-        print(f"{username} {password} {firstname} {gender}", file=f)
+        with open(username_file, "r") as f:
+            username2info = json.load(f)
+
+    assert username not in username2info, f"{username} already exists"
+
+    username2info[username] = {
+        "password": password,
+        "firstname": firstname,
+        "gender": gender,
+    }
+
+    with open(username_file, "w") as f:
+        json.dump(username2info, f)
+
+
+def delete_user(username: str) -> NoReturn:
+    """
+    Deletes the user from the database
+    :param username: username
+    """
+    username_file = DB_FOLDER / USERNAME_FILE
+
+    if not username_file.exists():
+        raise FileNotFoundError(f"{username_file} does not exist")
+
+    with open(username_file, "r") as f:
+        username2info = json.load(f)
+
+    del username2info[username]
+
 
 
 def check_password(password: str) -> Tuple[bool, str]:
@@ -102,6 +142,12 @@ def check_username(username: str) -> Tuple[bool, str]:
         message: what the user must change in the written username
     """
 
+    if check_if_user_exists(username):
+        return (
+            False,
+            "This username already exists. Please try another one."
+        )
+
     if len(username) < MIN_USERNAME_LENGTH:
         return (
             False,
@@ -109,26 +155,7 @@ def check_username(username: str) -> Tuple[bool, str]:
             f"characters long"
         )
 
-    username_file = DB_FOLDER / USERNAME_FILE
-    result = (True, "")
-
-    if username_file.exists():
-        with open(username_file) as f:
-            user_credentials = [
-                line.strip().split(' ') for line in f.readlines()
-            ]
-            existing_username = [
-                user_info for user_info in user_credentials
-                if user_info[0] == username
-            ]
-
-        if len(existing_username) > 0:
-            result = (
-                False,
-                "This username is already in use. Please try another one."
-            )
-
-    return result
+    return True, ""
 
 
 def check_firstname(firstname: str) -> Tuple[bool, str]:
