@@ -16,6 +16,9 @@ setuptools.setup(
     author="Adis Davletov, Boris Sheludko",
     url="https://github.com/gsavchenko97/qs_dashboard",
     packages=setuptools.find_packages(),
+    package_data={
+        'locales': ["*"]
+    }
     entry_points={
         'console_scripts': [
             'qs_dashboard = qs_dashboard.cli:main',

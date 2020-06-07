@@ -6,8 +6,9 @@ from pathlib import Path
 
 import gettext
 
-data_path = os.path.join(Path(__file__).resolve().parent, 'locale')
+data_path = os.path.join(Path(__file__).resolve().parent, 'locales')
 gettext.install("qs_dashboard", data_path)
+print(data_path)
 
 MAX_USERNAME_LENGTH = 30
 MIN_USERNAME_LENGTH = 2
