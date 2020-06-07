@@ -48,7 +48,7 @@ class MeasurementWindow(QDialog):
         # layout.addWidget(self.acceptabele_metrics_label, 2, 0, 1, 3)
 
         self.acceptabele_metrics = QComboBox()
-        self.acceptabele_metrics.addItems([_"-- choose metric --")] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics.addItems([_("-- choose metric --")] + sorted(AVAILABLE_METRICS))
         layout.addWidget(self.acceptabele_metrics, 2, 0, 1, 3)
 
         self.line_edit_day = QLineEdit()
