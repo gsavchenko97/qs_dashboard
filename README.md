@@ -39,12 +39,12 @@ cd qs_dashboard
 make run # запуск программы
 ```
 
-+ построить бинарник
++ построить бинарник с помщью pyinstaller
 ```bash
 git clone https://github.com/gsavchenko97/qs_dashboard.git
 cd qs_dashboard
 make build
-dist/qs_dasboard # запуск программы, но уже без русского языка :(
+dist/qs_dasboard # запуск программы, но уже без русского языка.
 ```
 
 # Возможности:
