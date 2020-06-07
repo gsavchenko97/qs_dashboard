@@ -10,7 +10,7 @@ dep: requirements.txt
 
 run: dep
 	. venv/bin/activate; \
-	python main.py; \
+	python -m qs_dashboard; \
 	deactivate;
 
 run-tests:
@@ -26,7 +26,6 @@ build: dep clean
 wheel: dep clean
 	. venv/bin/activate; \
 	python setup.py bdist_wheel; \
-	pip wheel -r requirements.txt; \
 	deactivate;
 
 clean:
