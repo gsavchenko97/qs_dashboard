@@ -33,7 +33,9 @@ class MeasurementWindow(QDialog):
         layout = QGridLayout()
 
         self.line_edit_measure_name = QLineEdit()
-        self.line_edit_measure_name.setPlaceholderText(_("Enter measurement name"))
+        self.line_edit_measure_name.setPlaceholderText(_(
+            "Enter measurement name"
+        ))
         self.line_edit_measure_name.setMaxLength(30)
         self.line_edit_measure_name.setFixedHeight(35)
         layout.addWidget(self.line_edit_measure_name, 0, 0, 1, 3)
@@ -44,11 +46,10 @@ class MeasurementWindow(QDialog):
         self.line_edit_value.setFixedHeight(35)
         layout.addWidget(self.line_edit_value, 1, 0, 1, 3)
 
-        # self.acceptabele_metrics_label = QLabel('Choose measurement metric from available:')
-        # layout.addWidget(self.acceptabele_metrics_label, 2, 0, 1, 3)
-
         self.acceptabele_metrics = QComboBox()
-        self.acceptabele_metrics.addItems([_("-- choose metric --")] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics.addItems(
+            [_("-- choose metric --")] + sorted(AVAILABLE_METRICS)
+        )
         layout.addWidget(self.acceptabele_metrics, 2, 0, 1, 3)
 
         self.line_edit_day = QLineEdit()
@@ -67,11 +68,15 @@ class MeasurementWindow(QDialog):
 
         self.setLayout(layout)
 
+    @property
+    def db(self):
+        return self.parent.db
+
     def handle_cancel(self):
         self.close()
 
     def handle_measurement_addition(self):
-        print('before:', self.parent.db.db, self.parent.db.metrics)
+        print('before:', self.db.db, self.db.metrics)
         measure_name = self.line_edit_measure_name.text()
         measure_value = self.line_edit_value.text()
         metric = self.acceptabele_metrics.currentText()
@@ -81,8 +86,12 @@ class MeasurementWindow(QDialog):
         allowed_name_chars = "A-Za-z"
         allowed_value_chars = "0-9."
 
-        valid_name = check_matching_to_chars(measure_name, allowed_name_chars)
-        valid_value = check_matching_to_chars(measure_value, allowed_value_chars)
+        valid_name = check_matching_to_chars(
+            measure_name, allowed_name_chars
+        )
+        valid_value = check_matching_to_chars(
+            measure_value, allowed_value_chars
+        )
         valid_metric = metric != _("-- choose metric --")
         valid_day = check_matching_to_chars(day, r"\d")
 
@@ -96,30 +105,32 @@ class MeasurementWindow(QDialog):
             valid_day
         )
 
-        print([key[0] for key in self.parent.db.metrics_converter.keys()])
+        print([key[0] for key in self.db.metrics_converter.keys()])
 
-        should_convert, from_metric = self.parent.db.if_metric_convertation_need(
-            measure_name,
-            metric)
-        convertation_rule_exist = (from_metric, metric) in self.parent.db.metrics_converter.keys()
-        if should_convert and not convertation_rule_exist:
+        should_convert, from_metric = self.db.if_metric_convertation_need(
+            measure_name, metric
+        )
+        rule_exist = (from_metric, metric) in self.db.metrics_converter.keys()
+        if should_convert and not rule_exist:
             msg_box = QMessageBox()
-            msg_box.setText(_("Please try first to add convertation rule\n") +
-                            _("from") + f" {from_metric} " + _("to") + f" {metric}")
+            msg_box.setText(
+                _("Please try first to add convertation rule\n") +
+                _("from") + f" {from_metric} " + _("to") + f" {metric}"
+            )
             msg_box.exec_()
         elif add_measurement_flags:
             measure_value = float(measure_value)
             day = int(day)
-            self.parent.db.add_measurement(
+            self.db.add_measurement(
                 measurement_name=measure_name,
                 value=measure_value,
                 metric=metric,
                 day=day
             )
-            self.parent.db.save_db(self.parent.db.db_path)
-            self.parent.db.save_metrics(self.parent.db.metrics_path)
+            self.db.save_db(self.db.db_path)
+            self.db.save_metrics(self.db.metrics_path)
             self.parent.update_metrics_list()
-            print('after:', self.parent.db.db, self.parent.db.metrics)
+            print('after:', self.db.db, self.db.metrics)
         else:
             msg_box = QMessageBox()
             msg_box.setText(_("Please fill correct values for:\n") +
@@ -145,11 +156,15 @@ class MeasurementConvertRuleWindow(QDialog):
         layout = QGridLayout()
 
         self.acceptabele_metrics_from = QComboBox()
-        self.acceptabele_metrics_from.addItems([_("-- choose metric --")] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics_from.addItems(
+            [_("-- choose metric --")] + sorted(AVAILABLE_METRICS)
+        )
         layout.addWidget(self.acceptabele_metrics_from, 0, 0, 1, 2)
 
         self.acceptabele_metrics_to = QComboBox()
-        self.acceptabele_metrics_to.addItems([_("-- choose metric --")] + sorted(AVAILABLE_METRICS))
+        self.acceptabele_metrics_to.addItems(
+            [_("-- choose metric --")] + sorted(AVAILABLE_METRICS)
+        )
         layout.addWidget(self.acceptabele_metrics_to, 0, 1, 1, 2)
 
         self.line_edit_value_from = QLineEdit()
@@ -186,9 +201,16 @@ class MeasurementConvertRuleWindow(QDialog):
         allowed_value_chars = "0-9."
 
         valid_pair = metric_from != metric_to
-        valid_values = check_matching_to_chars(value_from, allowed_value_chars)
+        valid_values = check_matching_to_chars(
+            value_from, allowed_value_chars
+        )
         valid_values = float(value_from) > 0 if valid_values else False
-        valid_values = check_matching_to_chars(value_to, allowed_value_chars) if valid_values else False
+        if valid_values:
+            valid_values = check_matching_to_chars(
+                value_to, allowed_value_chars
+            )
+        else:
+            valid_values = False
         valid_values = float(value_to) if valid_values else False
 
         add_conv_rule_flags = (
@@ -196,19 +218,23 @@ class MeasurementConvertRuleWindow(QDialog):
             valid_values
         )
 
-        print('before', self.parent.db.db, self.parent.db.metrics_converter)
+        print('before', self.db.db, self.db.metrics_converter)
         if add_conv_rule_flags:
             value_from = float(value_from)
             value_to = float(value_to)
-            self.parent.db.add_metrics_convertion(metric_from, metric_to, value_from, value_to)
+            self.db.add_metrics_convertion(
+                metric_from, metric_to, value_from, value_to
+            )
             self.parent.update_metrics_list()
-            print('before', self.parent.db.db, self.parent.db.metrics_converter)
+            print('before', self.db.db, self.db.metrics_converter)
             self.close()
             # self.show_login_window.emit(self)
         else:
             msg_box = QMessageBox()
-            msg_box.setText(_("Please fill correct values for:\n") +
-                            _("metrics sholdn't be the same\n") +
-                            _("values > 0"))
+            msg_box.setText(
+                _("Please fill correct values for:\n") +
+                _("metrics sholdn't be the same\n") +
+                _("values > 0")
+            )
             msg_box.exec_()
             self.close()

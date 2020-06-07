@@ -45,7 +45,9 @@ class Signup(QDialog):
         layout.addWidget(self.line_edit_firstname, 1, 0, 1, 3)
 
         self.line_edit_password = QLineEdit()
-        self.line_edit_password.setPlaceholderText(_("Enter your new password"))
+        self.line_edit_password.setPlaceholderText(_(
+            "Enter your new password"
+        ))
         self.line_edit_password.setMaxLength(MAX_PASSWORD_LENGTH)
         self.line_edit_password.setFixedHeight(35)
         layout.addWidget(self.line_edit_password, 2, 0, 1, 3)

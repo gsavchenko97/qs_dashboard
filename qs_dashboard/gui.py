@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         :param tab_name: tab that must be opened.
         """
         QMainWindow.__init__(self)
-        self.setWindowTitle(_(f"QS Dashboard") + f": {username}")
+        self.setWindowTitle(_("QS Dashboard") + f": {username}")
 
         self.username = username
         self.db = DataBase(username=username)
@@ -126,10 +126,12 @@ class MainWindow(QMainWindow):
         self.list_widget_conv_rules.clear()
         df = self.user_df
         if "measurement_name" in df.columns:
-            for metric in [_("Added measurements:")] + \
-                          list(df.measurement_name.unique()):
-                QListWidgetItem(metric, self.list_widget
-                )
+            metrics = (
+                    [_("Added measurements:")] +
+                    list(df.measurement_name.unique())
+            )
+            for metric in metrics:
+                QListWidgetItem(metric, self.list_widget)
         converter_rules = self.db.metrics_converter
         QListWidgetItem(
             _("Added convertation rules:"),
@@ -141,7 +143,7 @@ class MainWindow(QMainWindow):
                 self.list_widget_conv_rules
             )
 
-
+    @staticmethod
     def on_click(self):
         print('Simple Button was pushed')
 

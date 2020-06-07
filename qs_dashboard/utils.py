@@ -204,8 +204,9 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
     if len(firstname) < MIN_FIRSTNAME_LENGTH:
         return (
             False,
-            _(f"Your first name must be at least") + f"{MIN_FIRSTNAME_LENGTH} " +
-            _("characters long")
+            _("Your first name must be at least")
+            + f"{MIN_FIRSTNAME_LENGTH} "
+            + _("characters long")
         )
     return True, ""
 
