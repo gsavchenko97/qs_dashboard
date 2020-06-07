@@ -18,7 +18,7 @@
 
 # Установка:
 Установить программу можно разными способами:
-+ строим whl файл и устанавливаем его
++ строим whl файл и устанавливаем его запускаем
 ```bash
 git clone https://github.com/gsavchenko97/qs_dashboard.git
 cd qs_dashboard
