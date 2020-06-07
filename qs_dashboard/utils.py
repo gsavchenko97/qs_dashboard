@@ -10,7 +10,9 @@ import sys
 
 import gettext
 
-data_path = os.path.join(os.path.dirname(sys.argv[0]), 'qs_dashboard', 'locales')
+data_path = os.path.join(
+    os.path.dirname(sys.argv[0]), "qs_dashboard", "locales"
+)
 # data_path = os.path.join(Path(__file__).resolve().parent, 'locales')
 gettext.install("qs_dashboard", data_path)
 print(data_path)
