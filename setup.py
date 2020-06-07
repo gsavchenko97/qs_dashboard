@@ -1,12 +1,14 @@
 import setuptools
 import qs_dashboard
+import os
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 with open('requirements.txt', "r", encoding="utf8") as f:
     required = f.read().splitlines()
-
+print(os.path.join(
+                "locales", "ru", "LC_MESSAGES", "*.mo"))
 setuptools.setup(
     name="qs_dashboard",
     version=qs_dashboard.__version__,
@@ -17,7 +19,12 @@ setuptools.setup(
     url="https://github.com/gsavchenko97/qs_dashboard",
     packages=setuptools.find_packages(),
     package_data={
-        'locales': ["*"]
+        "qs_dashboard": [
+            os.path.join(
+                "locales", "ru", "LC_MESSAGES", "*.mo"),
+            os.path.join(
+                "locales", "ru", "LC_MESSAGES", "*.po")
+        ],
     },
     entry_points={
         'console_scripts': [

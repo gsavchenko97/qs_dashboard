@@ -1,3 +1,6 @@
+"""
+Signup window
+"""
 from PyQt5.QtWidgets import (
     QDialog, QPushButton, QRadioButton, QLineEdit, QGridLayout, QMessageBox
 )

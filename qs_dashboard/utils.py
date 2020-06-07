@@ -1,3 +1,6 @@
+"""
+Utility scripts for application and global variables
+"""
 import os
 import re
 import json
