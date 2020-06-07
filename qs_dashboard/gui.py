@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import (
     QFileDialog, QHBoxLayout, QVBoxLayout, QListWidget, QListWidgetItem)
 from PyQt5.QtCore import pyqtSignal, QRect
 
-from dashboard.db import DataBase
-from dashboard.figure import CreateFigure
+from qs_dashboard.db import DataBase
+from qs_dashboard.figure import CreateFigure
 
 import gettext
 from pathlib import Path

@@ -11,7 +11,7 @@ import json
 import os
 from pathlib import Path
 import pandas as pd
-from dashboard.utils.user import DB_FOLDER, AVAILABLE_METRICS
+from qs_dashboard.utils.user import DB_FOLDER, AVAILABLE_METRICS
 from typing import Dict, List, Any
 
 

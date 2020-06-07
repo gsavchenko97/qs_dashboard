@@ -1,4 +1,5 @@
 import setuptools
+import qs_dashboard
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -8,7 +9,7 @@ with open('requirements.txt', "r", encoding="utf8") as f:
 
 setuptools.setup(
     name="qs_dashboard",
-    version="1.0.0",
+    version=qs_dashboard.__version__,
     description="qs_dashboard is a tool for self checking",
     long_description=long_description,
     long_description_content_type="text/markdown",

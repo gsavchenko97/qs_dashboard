@@ -1,7 +1,7 @@
 import pytest
 import json
 
-from dashboard.utils.user import (
+from qs_dashboard.utils.user import (
     check_password, check_username,
     match_username_password, user_exists,
     create_new_user, delete_user,

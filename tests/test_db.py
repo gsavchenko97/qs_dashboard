@@ -1,6 +1,6 @@
 import pytest
 
-from dashboard.db import *
+from qs_dashboard.db import *
 
 
 @pytest.fixture

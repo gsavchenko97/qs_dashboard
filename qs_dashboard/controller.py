@@ -1,11 +1,11 @@
 from typing import Any
 
-from dashboard.dialog import DialogWindow
-from dashboard.gui import MainWindow
-from dashboard.login import Login
-from dashboard.measurement import MeasurementWindow, MeasurementConvertRuleWindow
-from dashboard.signup import Signup
-from dashboard.load_data_from_csv import LoadDataWindow
+from qs_dashboard.dialog import DialogWindow
+from qs_dashboard.gui import MainWindow
+from qs_dashboard.login import Login
+from qs_dashboard.measurement import MeasurementWindow, MeasurementConvertRuleWindow
+from qs_dashboard.signup import Signup
+from qs_dashboard.load_data_from_csv import LoadDataWindow
 
 
 class Controller:

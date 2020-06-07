@@ -1,4 +1,4 @@
-import dashboard
+import qs_dashboard
 
 if __name__ == "__main__":
-    dashboard.cli.main()
+    qs_dashboard.cli.main()

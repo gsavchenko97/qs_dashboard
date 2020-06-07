@@ -9,3 +9,6 @@ from . import login
 from . import measurement
 from . import signup
 from .utils import user
+
+
+__version__ = '1.0.0'
