@@ -34,7 +34,7 @@ clean:
 
 flake:
 	. venv/bin/activate; \
-	flake8 --ignore="F821,W503,F401" qs_dashboard; \
+	flake8 --ignore="F821,W503,F401,E128" qs_dashboard; \
 	deactivate;
 
 doc:
