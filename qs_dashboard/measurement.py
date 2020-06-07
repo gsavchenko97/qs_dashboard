@@ -93,10 +93,7 @@ class MeasurementWindow(QDialog):
         valid_value = float(measure_value) > 0.0 if valid_value else False
 
         add_measurement_flags = (
-            valid_name and
-            valid_value and
-            valid_metric and
-            valid_day
+            valid_name and valid_value and valid_metric and valid_day
         )
 
         print([key[0] for key in self.db.metrics_converter.keys()])
@@ -108,8 +105,8 @@ class MeasurementWindow(QDialog):
         if should_convert and not rule_exist:
             msg_box = QMessageBox()
             msg_box.setText(
-                _("Please try first to add convertation rule\n") +
-                _("from") + f" {from_metric} " + _("to") + f" {metric}"
+                _("Please try first to add convertation rule\n")
+                + _("from") + f" {from_metric} " + _("to") + f" {metric}"
             )
             msg_box.exec_()
         elif add_measurement_flags:
@@ -127,9 +124,11 @@ class MeasurementWindow(QDialog):
             print('after:', self.db.db, self.db.metrics)
         else:
             msg_box = QMessageBox()
-            msg_box.setText(_("Please fill correct values for:\n") +
-                            _("days > 0, values > 0, measurement_names:\n") +
-                            "[A-Za-z]")
+            msg_box.setText(
+                _("Please fill correct values for:\n")
+                + _("days > 0, values > 0, measurement_names:\n")
+                + "[A-Za-z]"
+            )
             msg_box.exec_()
         self.close()
 
@@ -207,10 +206,7 @@ class MeasurementConvertRuleWindow(QDialog):
             valid_values = False
         valid_values = float(value_to) if valid_values else False
 
-        add_conv_rule_flags = (
-            valid_pair and
-            valid_values
-        )
+        add_conv_rule_flags = valid_pair and valid_values
 
         print('before', self.db.db, self.db.metrics_converter)
         if add_conv_rule_flags:
@@ -226,9 +222,9 @@ class MeasurementConvertRuleWindow(QDialog):
         else:
             msg_box = QMessageBox()
             msg_box.setText(
-                _("Please fill correct values for:\n") +
-                _("metrics sholdn't be the same\n") +
-                _("values > 0")
+                _("Please fill correct values for:\n")
+                + _("metrics sholdn't be the same\n")
+                + _("values > 0")
             )
             msg_box.exec_()
             self.close()
