@@ -13,7 +13,7 @@ setuptools.setup(
     description="qs_dashboard is a tool for self checking",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author="Adis Davletov, Boris Sheludko, Gleb Savchenko",
+    author="Adis Davletov, Boris Sheludko",
     url="https://github.com/gsavchenko97/qs_dashboard",
     packages=setuptools.find_packages(),
     entry_points={

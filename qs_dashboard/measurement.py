@@ -6,12 +6,6 @@ from PyQt5.QtCore import pyqtSignal
 from qs_dashboard.utils import AVAILABLE_METRICS
 import re
 
-import gettext
-from pathlib import Path
-
-data_path = Path(__file__).resolve().parent
-gettext.install("qs_dashboard", data_path)
-
 
 def check_matching_to_chars(sting_val: str, allowed_char: str) -> bool:
     return bool(re.match(rf"^[{allowed_char}]+$", sting_val))

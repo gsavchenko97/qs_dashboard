@@ -9,11 +9,7 @@ from qs_dashboard.utils import (
     MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MAX_FIRSTNAME_LENGTH
 )
 
-import gettext
-from pathlib import Path
 
-data_path = Path(__file__).resolve().parent
-gettext.install("qs_dashboard", data_path)
 
 
 class Signup(QDialog):

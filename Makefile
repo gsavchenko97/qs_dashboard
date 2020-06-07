@@ -30,17 +30,16 @@ wheel: dep clean
 	deactivate;
 
 clean:
-	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc
+	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc .pytest_*
 
-lint:
+flake:
 	. venv/bin/activate; \
-	pylint --disable="C0103,C0301,C0116,C0115,R0914" qs_dashboard; \
+	flake8 --ignore="F821" qs_dashboard; \
 	deactivate;
 
 doc:
 	mkdir -p doc
 	. venv/bin/activate; \
-	python -m pydoc -w `find qs_dashboard -name qs_dashboard/utils '*.py'`; \
 	python -m pydoc -w `find qs_dashboard -name '*.py' | sed 's+/+.+g' | sed 's+.py++g'`; \
 	python -m pydoc -w qs_dashboard; \
 	deactivate;

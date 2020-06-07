@@ -6,12 +6,6 @@ import pandas as pd
 
 from qs_dashboard.utils import DF_COLUMNS
 
-import gettext
-from pathlib import Path
-
-data_path = Path(__file__).resolve().parent
-gettext.install("qs_dashboard", data_path)
-
 
 class LoadDataWindow(QDialog):
     """
