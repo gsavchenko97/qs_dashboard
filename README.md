@@ -26,7 +26,7 @@ make wheel
 
 . venv/bin/activate
 pip install dist/*.whl
-qs_dashboard # запуск программы
+python -m qs_dashboard # запуск программы
 deactivate
 
 ```
