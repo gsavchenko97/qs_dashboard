@@ -18,7 +18,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     package_data={
         'locales': ["*"]
-    }
+    },
     entry_points={
         'console_scripts': [
             'qs_dashboard = qs_dashboard.cli:main',
