@@ -32,9 +32,9 @@ wheel: dep clean
 clean:
 	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc .pytest_*
 
-lint:
+flake:
 	. venv/bin/activate; \
-	pylint --disable="C0103,C0301,C0116,C0115,R0914" qs_dashboard; \
+	flake8 --ignore="F821" qs_dashboard; \
 	deactivate;
 
 doc:
