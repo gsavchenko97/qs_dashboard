@@ -10,8 +10,6 @@ from qs_dashboard.utils import (
 )
 
 
-
-
 class Signup(QDialog):
     """
     Sign Up form
@@ -76,36 +74,33 @@ class Signup(QDialog):
         password = self.line_edit_password.text()
         firstname = self.line_edit_firstname.text()
         gender = self.gender
+        create_user_flag = True
 
         messages = []
         valid_password, msg_password = check_password(password)
         if not valid_password:
+            create_user_flag = False
             messages.append(_("Password:"))
             messages.append(self.transform_message(msg_password))
 
         valid_username, msg_username = check_username(username)
         if not valid_username:
+            create_user_flag = False
             messages.append(_("Username:"))
-            messages.append(self.transform_message(msg_username))
+            messages.append(self.transform_message(msg_username))g
 
         valid_firstname, msg_firstname = check_firstname(firstname)
         if not valid_firstname:
+            create_user_flag = False
             messages.append(_("Firstname:"))
             messages.append(self.transform_message(msg_firstname))
 
         if gender is None:
+            create_user_flag = False
             messages.append(_("Gender:"))
             messages.append(self.transform_message(
                 _("Please choose your gender")
             ))
-
-        create_user_flag = (
-                valid_password and
-                valid_firstname and
-                valid_firstname and
-                valid_username and
-                gender is not None
-        )
 
         if create_user_flag:
             create_new_user(
