@@ -1,6 +1,6 @@
 PYTHON=python3
 
-.PHONY: dep run run-tests build clean lint doc
+.PHONY: dep run run-tests build clean lint
 
 dep: requirements.txt
 	@$(PYTHON) -m venv venv
@@ -30,18 +30,19 @@ wheel: dep clean
 	deactivate;
 
 clean:
-	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc .pytest_* */__pycache__
+# 	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc .pytest_* */__pycache__
+	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info .pytest_* */__pycache__
 
 flake:
 	. venv/bin/activate; \
 	flake8 --ignore="F821,W503,F401,E128" qs_dashboard; \
 	deactivate;
 
-doc:
-	mkdir -p doc
-	. venv/bin/activate; \
-	python -m pydoc -w `find qs_dashboard -name '*.py' | sed 's+/+.+g' | sed 's+.py++g'`; \
-	python -m pydoc -w qs_dashboard; \
-	deactivate;
-	cp qs_dashboard.html index.html
-	mv *.html doc
+# doc:
+# 	mkdir -p doc
+# 	. venv/bin/activate; \
+# 	python -m pydoc -w `find qs_dashboard -name '*.py' | sed 's+/+.+g' | sed 's+.py++g'`; \
+# 	python -m pydoc -w qs_dashboard; \
+# 	deactivate;
+# 	cp qs_dashboard.html index.html
+# 	mv *.html doc
