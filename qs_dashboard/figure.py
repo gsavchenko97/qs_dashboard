@@ -73,7 +73,7 @@ class CreateFigure(QWidget):
         mean_value = sum(target_values) / len(target_values)
         values = [mean_value if x < 0 else x for x in values]
         y_label = local_df.metric.values[0]
-        title = f"{metric} " + _("in") + f" {y_label} " + _("per day")
+        title = _("%s in %s per day") % (metric, y_label)
         self.figure.update_plot(
             local_df.day.to_list(), values, title
         )

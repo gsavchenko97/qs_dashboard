@@ -40,10 +40,10 @@ AVAILABLE_METRICS = {
 
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (
-    _("Your password must consist of these characters: ")
-    + f"{PASSWORD_ALLOWED_CHARS} \n"
-    + _("Your password must be at least")
-    + f"{MIN_PASSWORD_LENGTH}" + _("characters long")
+    _("Your password must consist of these characters: %s") %
+    PASSWORD_ALLOWED_CHARS
+    + _("Your password must be at least %s characters long") %
+    MIN_PASSWORD_LENGTH
 )
 
 
@@ -110,7 +110,8 @@ def create_new_user(
         with open(username_file, "r") as f:
             username2info = json.load(f)
 
-    assert username not in username2info, f"{username} " + _("already exists")
+    assert username not in username2info, _("%s username already exists") % \
+        username
 
     username2info[username] = {
         "password": password,
@@ -130,7 +131,7 @@ def delete_user(username: str, db_filename: str = USERNAME_FILE) -> NoReturn:
     username_file = DB_FOLDER / db_filename
 
     if not username_file.exists():
-        raise FileNotFoundError(f"{username_file}" + _("does not exist"))
+        raise FileNotFoundError(f"{username_file}" + "does not exist")
 
     with open(username_file, "r") as f:
         username2info = json.load(f)
@@ -156,8 +157,8 @@ def check_password(password: str) -> Tuple[bool, str]:
     if len(password) < MIN_PASSWORD_LENGTH:
         return (
             False,
-            _("Your password must be at least") + f" {MIN_PASSWORD_LENGTH} "
-            + _("characters long")
+            _("Your password must be at least %s "
+              "characters long") % MIN_PASSWORD_LENGTH
         )
 
     if not re.match(rf"^[{PASSWORD_ALLOWED_CHARS}]+$", password):
@@ -182,14 +183,15 @@ def check_username(
     if user_exists(username, db_filename):
         return (
             False,
-            _("This username already exists. Please try another one.")
+            _("This username already exists. "
+              "Please try another one.")
         )
 
     if len(username) < MIN_USERNAME_LENGTH:
         return (
             False,
-            _("Your username must be at least") + f" {MIN_USERNAME_LENGTH} "
-            + _("characters long")
+            _("Your username must be at least %s "
+              "characters long") % MIN_USERNAME_LENGTH
         )
 
     return True, ""
@@ -206,27 +208,7 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
     if len(firstname) < MIN_FIRSTNAME_LENGTH:
         return (
             False,
-            _("Your first name must be at least")
-            + f"{MIN_FIRSTNAME_LENGTH} "
-            + _("characters long")
+            _("Your first name must be at least %s "
+              "characters long") % MIN_FIRSTNAME_LENGTH
         )
     return True, ""
-
-
-class User:
-    def __init__(self, username: str):
-        username_file = DB_FOLDER / USERNAME_FILE
-
-        if not username_file.exists():
-            raise FileNotFoundError(f"{username_file}" + _("does not exist"))
-
-        with open(username_file, "r") as f:
-            username2info = json.load(f)
-
-        if username not in username2info:
-            raise ValueError(f"'{username}'" + _("user does not exists"))
-
-        info = username2info[username]
-        self.username = username
-        self.firstname = info["firstname"]
-        self.gender = info["gender"]

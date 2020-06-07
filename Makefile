@@ -30,7 +30,7 @@ wheel: dep clean
 	deactivate;
 
 clean:
-	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc .pytest_*
+	rm -rf dist build __pycache__ qs_dashboard.spec *.whl *.egg-info doc .pytest_* */__pycache__
 
 flake:
 	. venv/bin/activate; \

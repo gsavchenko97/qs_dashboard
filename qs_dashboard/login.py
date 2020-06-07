@@ -17,7 +17,7 @@ class Login(QDialog):
 
     def __init__(self, parent=None):
         super(Login, self).__init__(parent)
-        self.setWindowTitle('Log In')
+        self.setWindowTitle(_("Log In"))
         self.resize(400, 200)
 
         layout = QGridLayout()

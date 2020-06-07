@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         :param tab_name: tab that must be opened.
         """
         QMainWindow.__init__(self)
-        self.setWindowTitle(_("QS Dashboard") + f": {username}")
+        self.setWindowTitle(_("QS Dashboard: %s") % username)
 
         self.username = username
         self.db = DataBase(username=username)

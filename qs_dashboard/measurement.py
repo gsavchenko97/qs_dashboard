@@ -105,8 +105,8 @@ class MeasurementWindow(QDialog):
         if should_convert and not rule_exist:
             msg_box = QMessageBox()
             msg_box.setText(
-                _("Please try first to add convertation rule\n")
-                + _("from") + f" {from_metric} " + _("to") + f" {metric}"
+                _("Please try first to add convertation rule\nfrom %s to %s") %
+                (from_metric, metric)
             )
             msg_box.exec_()
         elif add_measurement_flags:
@@ -125,9 +125,8 @@ class MeasurementWindow(QDialog):
         else:
             msg_box = QMessageBox()
             msg_box.setText(
-                _("Please fill correct values for:\n")
-                + _("days > 0, values > 0, measurement_names:\n")
-                + "[A-Za-z]"
+                _("Please fill correct values for:\n"
+                "days: > 0, values: > 0, measurement_names: [A-Za-z]")
             )
             msg_box.exec_()
         self.close()
@@ -222,9 +221,9 @@ class MeasurementConvertRuleWindow(QDialog):
         else:
             msg_box = QMessageBox()
             msg_box.setText(
-                _("Please fill correct values for:\n")
-                + _("metrics sholdn't be the same\n")
-                + _("values > 0")
+                _("Please fill correct values for:\n\
+                metrics: must differ\n\
+                values: > 0")
             )
             msg_box.exec_()
             self.close()
