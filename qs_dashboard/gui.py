@@ -123,8 +123,8 @@ class MainWindow(QMainWindow):
         df = self.user_df
         if "measurement_name" in df.columns:
             metrics = (
-                    [_("Added measurements:")] +
-                    list(df.measurement_name.unique())
+                [_("Added measurements:")]
+                + list(df.measurement_name.unique())
             )
             for metric in metrics:
                 QListWidgetItem(metric, self.list_widget)
