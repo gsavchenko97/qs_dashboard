@@ -44,7 +44,7 @@ make run # запуск программы
 git clone https://github.com/gsavchenko97/qs_dashboard.git
 cd qs_dashboard
 make build
-dist/qs_dasboard # запуск программы, но уже без языка :(
+dist/qs_dasboard # запуск программы, но уже без русского языка :(
 ```
 
 # Возможности:
