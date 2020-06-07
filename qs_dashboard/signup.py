@@ -87,7 +87,7 @@ class Signup(QDialog):
         if not valid_username:
             create_user_flag = False
             messages.append(_("Username:"))
-            messages.append(self.transform_message(msg_username))g
+            messages.append(self.transform_message(msg_username))
 
         valid_firstname, msg_firstname = check_firstname(firstname)
         if not valid_firstname:
