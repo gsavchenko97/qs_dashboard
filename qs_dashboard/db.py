@@ -9,7 +9,7 @@ lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 
 import json
 import os
-from pathlib import Path
+
 import pandas as pd
 from qs_dashboard.utils import DB_FOLDER, AVAILABLE_METRICS
 from typing import Dict, List, Any

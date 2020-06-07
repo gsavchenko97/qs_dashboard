@@ -3,9 +3,10 @@ import re
 import json
 from typing import Tuple, NoReturn
 from pathlib import Path
+
 import gettext
 
-data_path = Path(__file__).resolve().parent
+data_path = os.path.join(Path(__file__).resolve().parent, 'locale')
 gettext.install("qs_dashboard", data_path)
 
 MAX_USERNAME_LENGTH = 30

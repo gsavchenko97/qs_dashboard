@@ -7,12 +7,6 @@ from qs_dashboard.utils import (
     match_username_password, MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH
 )
 
-import gettext
-from pathlib import Path
-
-data_path = Path(__file__).resolve().parent
-gettext.install("qs_dashboard", data_path)
-
 
 class Login(QDialog):
     """

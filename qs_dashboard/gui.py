@@ -6,11 +6,6 @@ from PyQt5.QtCore import pyqtSignal, QRect
 from qs_dashboard.db import DataBase
 from qs_dashboard.figure import CreateFigure
 
-import gettext
-from pathlib import Path
-
-data_path = Path(__file__).resolve().parent
-gettext.install("qs_dashboard", data_path)
 
 TABNAME2IDX = {
     "add_data": 0,
@@ -41,6 +36,7 @@ class MainWindow(QMainWindow):
 
         self.username = username
         self.db = DataBase(username=username)
+        print(self.db.DB_FOLDER)
 
         self.resize(800, 600)
         self.tabs = QTabWidget()
