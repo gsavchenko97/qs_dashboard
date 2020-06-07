@@ -13,7 +13,7 @@
 # Эскиз интерфейса:
 Графический интерфейс приложения выглядит следующим образом:
 
-![Эскиз интерфейса](https://github.com/gsavchenko97/qs_dashboard/blob/master/qs_dashboard_gui.png)
+![Эскиз интерфейса](https://github.com/gsavchenko97/qs_dashboard/blob/master/images/qs_dashboard_gui.png)
 
 
 # Установка:
