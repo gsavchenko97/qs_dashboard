@@ -6,10 +6,12 @@ import re
 import json
 from typing import Tuple, NoReturn
 from pathlib import Path
+import sys
 
 import gettext
 
-data_path = os.path.join(Path(__file__).resolve().parent, 'locales')
+data_path = os.path.join(os.path.dirname(sys.argv[0]), 'locales')
+# data_path = os.path.join(Path(__file__).resolve().parent, 'locales')
 gettext.install("qs_dashboard", data_path)
 print(data_path)
 

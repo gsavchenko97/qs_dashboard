@@ -20,7 +20,7 @@ class MeasurementWindow(QDialog):
     def __init__(self, parent=None):
         super(MeasurementWindow, self).__init__(parent)
 
-        self.setWindowTitle('Add measurement')
+        self.setWindowTitle(_("Add measurement"))
         self.resize(400, 300)
         self.parent = parent
 
@@ -125,8 +125,8 @@ class MeasurementWindow(QDialog):
         else:
             msg_box = QMessageBox()
             msg_box.setText(
-                _("Please fill correct values for:\n"
-                "days: > 0, values: > 0, measurement_names: [A-Za-z]")
+                _("Please fill correct values for: days: > 0, "
+                  "values: > 0, measurement_names: [A-Za-z]")
             )
             msg_box.exec_()
         self.close()
@@ -217,7 +217,6 @@ class MeasurementConvertRuleWindow(QDialog):
             self.parent.update_metrics_list()
             print('before', self.db.db, self.db.metrics_converter)
             self.close()
-            # self.show_login_window.emit(self)
         else:
             msg_box = QMessageBox()
             msg_box.setText(

@@ -1,0 +1,367 @@
+# Russian translations for PACKAGE package
+# Английские переводы для пакета PACKAGE.
+# Copyright (C) 2020 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Adis Davletov <adis_davletov@mbp-adis>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-07 21:17+0300\n"
+"PO-Revision-Date: 2020-06-07 21:17+0300\n"
+"Last-Translator: Adis Davletov <adis_davletov@mbp-adis>\n"
+"Language-Team: Russian <gnu@d07.ru>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: qs_dashboard/dialog.py:20
+msgid "Add Data"
+msgstr "Добавить Данные"
+
+#: qs_dashboard/dialog.py:24
+msgid "Create Figure"
+msgstr "Нарисовать График"
+
+#: qs_dashboard/dialog.py:28 qs_dashboard/login.py:45
+msgid "Exit"
+msgstr "Выйти"
+
+#: qs_dashboard/figure.py:76
+#, python-format
+msgid "%s in %s per day"
+msgstr "%s: %s в день"
+
+#: qs_dashboard/gui.py:35
+#, python-format
+msgid "QS Dashboard: %s"
+msgstr "QS Dashboard: %s"
+
+#: qs_dashboard/gui.py:47
+msgid "---> Plots <---"
+msgstr "---> Графики <---"
+
+#: qs_dashboard/gui.py:70
+msgid "---> Data <---"
+msgstr "---> Данные <---"
+
+#: qs_dashboard/gui.py:87
+msgid "Load Data"
+msgstr "Загрузить"
+
+#: qs_dashboard/gui.py:92
+msgid "Add Measurement"
+msgstr "Добавить Замер"
+
+#: qs_dashboard/gui.py:97
+msgid "Add metrics convertation rule"
+msgstr "Добавить правило конвертации"
+
+#: qs_dashboard/gui.py:102
+msgid "Save Data"
+msgstr "Сохранить"
+
+#: qs_dashboard/gui.py:107
+msgid "Logout"
+msgstr "Выйти"
+
+#: qs_dashboard/gui.py:126
+msgid "Added measurements:"
+msgstr "Добавленные переменные"
+
+#: qs_dashboard/gui.py:133
+msgid "Added convertation rules:"
+msgstr "Добавленные правила конвертации"
+
+#: qs_dashboard/gui.py:158
+msgid "Save file"
+msgstr "СОхранить файл"
+
+#: qs_dashboard/gui.py:160
+msgid "All Files (*);;Text Files (*.txt)"
+msgstr "Все файлы (*);;Текстовые файлы (*.txt)"
+
+#: qs_dashboard/load_data_from_csv.py:25
+msgid "Choose csv-like file to download data from:"
+msgstr "Выберит csv-подобный файл для загрузки"
+
+#: qs_dashboard/load_data_from_csv.py:29
+msgid "Choose file"
+msgstr "Выбрать файл"
+
+#: qs_dashboard/load_data_from_csv.py:33
+msgid "No file chosen"
+msgstr "Файл не выбран"
+
+#: qs_dashboard/load_data_from_csv.py:36
+msgid "Ok"
+msgstr "Ок"
+
+#: qs_dashboard/load_data_from_csv.py:40 qs_dashboard/measurement.py:59
+#: qs_dashboard/measurement.py:178
+msgid "Cancel"
+msgstr "Отмена"
+
+#: qs_dashboard/load_data_from_csv.py:58
+msgid "PLease choose file"
+msgstr "Выберите файл"
+
+#: qs_dashboard/load_data_from_csv.py:72
+msgid "PLease choose another file with acceptable values"
+msgstr "Выберите файл в нужном формате"
+
+#: qs_dashboard/load_data_from_csv.py:94
+msgid "Open file"
+msgstr "Открыть файл"
+
+#: qs_dashboard/login.py:20 qs_dashboard/login.py:37
+msgid "Log In"
+msgstr "Войти"
+
+#: qs_dashboard/login.py:26
+msgid "Username"
+msgstr "Логин"
+
+#: qs_dashboard/login.py:32
+msgid "Password"
+msgstr "Пароль"
+
+#: qs_dashboard/login.py:41 qs_dashboard/signup.py:27 qs_dashboard/signup.py:62
+msgid "Sign Up"
+msgstr "Регистрация"
+
+#: qs_dashboard/login.py:62
+msgid "Incorrect Username or Password"
+msgstr "Неправильный логин или пароль"
+
+#: qs_dashboard/measurement.py:23 qs_dashboard/measurement.py:55
+msgid "Add measurement"
+msgstr "Добавить замер"
+
+#: qs_dashboard/measurement.py:31
+msgid "Enter measurement name"
+msgstr "Введите название измерения"
+
+#: qs_dashboard/measurement.py:38
+msgid "Enter measurement value"
+msgstr "Введите значение измерения"
+
+#: qs_dashboard/measurement.py:45 qs_dashboard/measurement.py:89
+#: qs_dashboard/measurement.py:152 qs_dashboard/measurement.py:158
+msgid "-- choose metric --"
+msgstr "-- выберите метрику --"
+
+#: qs_dashboard/measurement.py:50
+msgid "Enter measurement day"
+msgstr "Введите день замера"
+
+#: qs_dashboard/measurement.py:108
+#, python-format
+msgid ""
+"Please try first to add convertation rule\n"
+"from %s to %s"
+msgstr ""
+"Добавьте сначала правило конвертации\n"
+"с %s к %s"
+
+#: qs_dashboard/measurement.py:128
+msgid ""
+"Please fill correct values for: days: > 0, values: > 0, measurement_names: "
+"[A-Za-z]"
+msgstr ""
+"Введите корректные данные для: дни: > 0, значения: > 0, названия замеров: "
+"[A-Za-z]"
+#: qs_dashboard/measurement.py:144
+msgid "Add measurement rule"
+msgstr "Добавить правило конвертации"
+
+#: qs_dashboard/measurement.py:163 qs_dashboard/measurement.py:169
+msgid "Enter value"
+msgstr "Введите значение"
+
+#: qs_dashboard/measurement.py:174
+msgid "Add rule"
+msgstr "Добавить правило"
+
+#: qs_dashboard/measurement.py:223
+msgid ""
+"Please fill correct values for:\n"
+"                metrics: must differ\n"
+"                values: > 0"
+msgstr ""
+"Введите кооректные значения для:\n"
+"                метрик: должны различаться\n"
+"                занчения: > 0"
+
+#: qs_dashboard/signup.py:33
+msgid "Enter your username"
+msgstr "Введите ваш логин"
+
+#: qs_dashboard/signup.py:39
+msgid "Enter your first name"
+msgstr "Введите вашу фамилию"
+
+#: qs_dashboard/signup.py:46
+msgid "Enter your new password"
+msgstr "Введите ваш пароль"
+
+#: qs_dashboard/signup.py:52 qs_dashboard/signup.py:53
+msgid "Male"
+msgstr "Мужчина"
+
+#: qs_dashboard/signup.py:57 qs_dashboard/signup.py:58
+msgid "Female"
+msgstr "Женщина"
+
+#: qs_dashboard/signup.py:66
+msgid "Log In to Existing Account"
+msgstr "Войти в существующий аккаунт"
+
+#: qs_dashboard/signup.py:86
+msgid "Password:"
+msgstr "Пароль"
+
+#: qs_dashboard/signup.py:92
+msgid "Username:"
+msgstr "Логин"
+
+#: qs_dashboard/signup.py:98
+msgid "Firstname:"
+msgstr "Фамилия"
+
+#: qs_dashboard/signup.py:103
+msgid "Gender:"
+msgstr "Пол"
+
+#: qs_dashboard/signup.py:105
+msgid "Please choose your gender"
+msgstr "Выберите пол"
+
+#: qs_dashboard/utils.py:33
+msgid "kg"
+msgstr "кг"
+
+#: qs_dashboard/utils.py:33
+msgid "gr"
+msgstr "гр"
+
+#: qs_dashboard/utils.py:34
+msgid "mg"
+msgstr "мг"
+
+#: qs_dashboard/utils.py:34
+msgid "ton"
+msgstr "тонна"
+
+#: qs_dashboard/utils.py:35
+msgid "km"
+msgstr "км"
+
+#: qs_dashboard/utils.py:35
+msgid "m"
+msgstr "м"
+
+#: qs_dashboard/utils.py:36
+msgid "cm"
+msgstr "см"
+
+#: qs_dashboard/utils.py:36
+msgid "mm"
+msgstr "мм"
+
+#: qs_dashboard/utils.py:37
+msgid "km ** 2"
+msgstr "км ** 2"
+
+#: qs_dashboard/utils.py:37
+msgid "m ** 2"
+msgstr "м ** 2"
+
+#: qs_dashboard/utils.py:38
+msgid "cm ** 2"
+msgstr "см ** 2"
+
+#: qs_dashboard/utils.py:38
+msgid "mm ** 2"
+msgstr "мм ** 2"
+
+#: qs_dashboard/utils.py:39
+msgid "hour"
+msgstr "час ** 2"
+
+#: qs_dashboard/utils.py:39
+msgid "minute"
+msgstr "минута"
+
+#: qs_dashboard/utils.py:39
+msgid "s"
+msgstr "с"
+
+#: qs_dashboard/utils.py:39
+msgid "ms"
+msgstr "мс"
+
+#: qs_dashboard/utils.py:40
+msgid "km ** 3"
+msgstr "км"
+
+#: qs_dashboard/utils.py:40
+msgid "m ** 3"
+msgstr "м ** 3"
+
+#: qs_dashboard/utils.py:41
+msgid "cm ** 3"
+msgstr "см ** 3"
+
+#: qs_dashboard/utils.py:41
+msgid "mm ** 3"
+msgstr "мм ** 3"
+
+#: qs_dashboard/utils.py:41
+msgid "liter"
+msgstr "литр"
+
+#: qs_dashboard/utils.py:42
+msgid "ruble"
+msgstr "рубль"
+
+#: qs_dashboard/utils.py:42
+msgid "dollar"
+msgstr "доллар"
+
+#: qs_dashboard/utils.py:43
+msgid "euro"
+msgstr "евро"
+
+#: qs_dashboard/utils.py:48
+#, python-format
+msgid "Your password must consist of these characters: %s"
+msgstr "Ваш пароль должен состоять из этих символов: %s"
+
+#: qs_dashboard/utils.py:50 qs_dashboard/utils.py:165
+#, python-format
+msgid "Your password must be at least %s characters long"
+msgstr "Ваш пароль должен содержать как минимум %s символов"
+
+#: qs_dashboard/utils.py:118
+#, python-format
+msgid "%s username already exists"
+msgstr "Логин %s уже занят"
+
+#: qs_dashboard/utils.py:191
+msgid "This username already exists. Please try another one."
+msgstr "Этот логин занят. Попробуйте другой."
+
+#: qs_dashboard/utils.py:198
+#, python-format
+msgid "Your username must be at least %s characters long"
+msgstr "Ваш логин должен содержать как минимум %s символов"
+
+#: qs_dashboard/utils.py:216
+#, python-format
+msgid "Your first name must be at least %s characters long"
+msgstr "Ваша фамилия должна содержать как минимум %s символов"
