@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import pyqtSignal
 
-from qs_dashboard.utils.user import AVAILABLE_METRICS
+from qs_dashboard.utils import AVAILABLE_METRICS
 import re
 
 import gettext

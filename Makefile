@@ -40,6 +40,7 @@ lint:
 doc:
 	mkdir -p doc
 	. venv/bin/activate; \
+	python -m pydoc -w `find qs_dashboard -name qs_dashboard/utils '*.py'`; \
 	python -m pydoc -w `find qs_dashboard -name '*.py' | sed 's+/+.+g' | sed 's+.py++g'`; \
 	python -m pydoc -w qs_dashboard; \
 	deactivate;

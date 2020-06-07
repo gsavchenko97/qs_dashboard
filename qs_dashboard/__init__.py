@@ -8,7 +8,6 @@ from . import load_data_from_csv
 from . import login
 from . import measurement
 from . import signup
-from .utils import user
 
 
 __version__ = '1.0.0'

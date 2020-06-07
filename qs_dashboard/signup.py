@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import pyqtSignal
 
-from qs_dashboard.utils.user import (
+from qs_dashboard.utils import (
     create_new_user,
     check_password, check_username, check_firstname,
     MAX_PASSWORD_LENGTH, MAX_USERNAME_LENGTH, MAX_FIRSTNAME_LENGTH

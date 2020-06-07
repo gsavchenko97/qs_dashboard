@@ -5,7 +5,7 @@ from typing import Tuple, NoReturn
 from pathlib import Path
 import gettext
 
-data_path = Path(__file__).resolve().parent.parent
+data_path = Path(__file__).resolve().parent
 gettext.install("qs_dashboard", data_path)
 
 MAX_USERNAME_LENGTH = 30
@@ -17,7 +17,7 @@ MIN_FIRSTNAME_LENGTH = 1
 MAX_PASSWORD_LENGTH = 30
 MIN_PASSWORD_LENGTH = 2
 
-DB_FOLDER = Path(__file__).resolve().parent.parent.parent / ".db"
+DB_FOLDER = Path(__file__).resolve().parent.parent / ".db"
 USERNAME_FILE = "users.json"  # i know that it is not secure
 DF_COLUMNS = [
     "measurement_name", "value", "metric", "day"

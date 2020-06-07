@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import pyqtSignal
 import pandas as pd
 
-from qs_dashboard.utils.user import DF_COLUMNS
+from qs_dashboard.utils import DF_COLUMNS
 
 import gettext
 from pathlib import Path
