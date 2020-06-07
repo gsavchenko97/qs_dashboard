@@ -18,7 +18,7 @@
 
 # Установка:
 Установить программу можно разными способами:
-+ строим whl файл и устанавливаем его запускаем
++ строим whl файл, устанавливаем  и запускаем
 ```bash
 git clone https://github.com/gsavchenko97/qs_dashboard.git
 cd qs_dashboard
@@ -26,7 +26,7 @@ make wheel
 
 . venv/bin/activate
 pip install dist/*.whl
-qs_dashboard # запуск программы
+python -m qs_dashboard # запуск программы
 deactivate
 
 ```
@@ -43,7 +43,7 @@ make run # запуск программы
 git clone https://github.com/gsavchenko97/qs_dashboard.git
 cd qs_dashboard
 make build
-dist/qs_dasboard # запуск программы
+dist/qs_dasboard # запуск программы, но уже без языка :(
 ```
 
 # Возможности:
