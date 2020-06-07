@@ -27,7 +27,7 @@ make wheel
 . venv/bin/activate
 pip install dist/*.whl
 LC_ALL=ru_RU.UTF-8 python -m qs_dashboard # запуск программы на русском
-LC_ALL=C python -m qs_dasboard  # запуск программы на английском
+LC_ALL=C python -m qs_dashboard  # запуск программы на английском
 deactivate
 
 ```
