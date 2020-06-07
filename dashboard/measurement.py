@@ -26,7 +26,7 @@ class MeasurementWindow(QDialog):
     def __init__(self, parent=None):
         super(MeasurementWindow, self).__init__(parent)
 
-        self.setWindowTitle('Sign Up')
+        self.setWindowTitle('Add measurement')
         self.resize(400, 300)
         self.parent = parent
 
@@ -118,6 +118,7 @@ class MeasurementWindow(QDialog):
             )
             self.parent.db.save_db(self.parent.db.db_path)
             self.parent.db.save_metrics(self.parent.db.metrics_path)
+            self.parent.update_metrics_list()
             print('after:', self.parent.db.db, self.parent.db.metrics)
         else:
             msg_box = QMessageBox()
@@ -137,7 +138,7 @@ class MeasurementConvertRuleWindow(QDialog):
     def __init__(self, parent=None):
         super(MeasurementConvertRuleWindow, self).__init__(parent)
 
-        self.setWindowTitle(_("Sign Up"))
+        self.setWindowTitle(_("Add measurement rule"))
         self.resize(400, 150)
         self.parent = parent
 
@@ -200,6 +201,7 @@ class MeasurementConvertRuleWindow(QDialog):
             value_from = float(value_from)
             value_to = float(value_to)
             self.parent.db.add_metrics_convertion(metric_from, metric_to, value_from, value_to)
+            self.parent.update_metrics_list()
             print('before', self.parent.db.db, self.parent.db.metrics_converter)
             self.close()
             # self.show_login_window.emit(self)

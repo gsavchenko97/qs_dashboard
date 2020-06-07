@@ -7,7 +7,7 @@
 В приложении можно добавлять новые графики, выбирать для них единицы измерения и добавлять новые точки на график.
 
 # Эскиз интерфейса:
-![Эскиз интерфейса](https://github.com/gsavchenko97/qs_dashboard/blob/master/ui_example.jpg)
+![Эскиз интерфейса](https://github.com/gsavchenko97/qs_dashboard/blob/master/qs_dashboard_gui.png)
 
 
 # Участники:

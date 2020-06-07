@@ -25,6 +25,7 @@ class FigureCanvas(FigureCanvasQTAgg):
         self.axes.set_title(title)
         self.draw()
 
+
 class CreateFigure(QWidget):
     def __init__(self, parent: Any):
         super(CreateFigure, self).__init__()
@@ -71,6 +72,8 @@ class CreateFigure(QWidget):
         target_values = [x for x in values if x >=0]
         mean_value = sum(target_values) / len(target_values)
         values = [mean_value if x < 0 else x for x in values]
+        y_label = local_df.metric.values[0]
+        title = f"{metric} " + _("in") + f" {y_label} "+ _("per day")
         self.figure.update_plot(
-            local_df.day.to_list(), values, metric
+            local_df.day.to_list(), values, title
         )

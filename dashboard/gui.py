@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         )
         for (from_metric, to_metric), val in converter_rules.items():
             QListWidgetItem(
-                f'{to_metric} / {from_metric} = {round(val, 5)}',
+                f'{from_metric} / {to_metric} = {round(val, 5)}',
                 self.list_widget_conv_rules
             )
 
@@ -155,11 +155,11 @@ class MainWindow(QMainWindow):
     def handle_data_saving(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        filename, _ = QFileDialog.getSaveFileName(
+        filename, trash = QFileDialog.getSaveFileName(
             self,
             _("Save file"),
             "",
-            "All Files (*);;Text Files (*.txt)", options=options
+            _("All Files (*);;Text Files (*.txt)"), options=options
         )
         if filename:
             print('saving data to', filename)

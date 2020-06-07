@@ -95,7 +95,7 @@ class LoadDataWindow(QDialog):
         self.close()
 
     def choose_data_file(self):
-        filename, _ = QFileDialog.getOpenFileName(
+        filename, trash = QFileDialog.getOpenFileName(
             None,
             caption=_("Open file"),
             directory="",
