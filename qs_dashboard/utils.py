@@ -40,10 +40,10 @@ AVAILABLE_METRICS = {
 
 PASSWORD_ALLOWED_CHARS = "A-Za-z0-9@#$%^&+="
 PASSWORD_REQUIREMENTS = (
-    _("Your password must consist of these characters: ") +
-    f"{PASSWORD_ALLOWED_CHARS} \n" +
-    _("Your password must be at least") +
-    f"{MIN_PASSWORD_LENGTH}" + _("characters long")
+    _("Your password must consist of these characters: ")
+    + f"{PASSWORD_ALLOWED_CHARS} \n"
+    + _("Your password must be at least")
+    + f"{MIN_PASSWORD_LENGTH}" + _("characters long")
 )
 
 
@@ -156,8 +156,8 @@ def check_password(password: str) -> Tuple[bool, str]:
     if len(password) < MIN_PASSWORD_LENGTH:
         return (
             False,
-            _("Your password must be at least") + f" {MIN_PASSWORD_LENGTH} " +
-            _("characters long")
+            _("Your password must be at least") + f" {MIN_PASSWORD_LENGTH} "
+            + _("characters long")
         )
 
     if not re.match(rf"^[{PASSWORD_ALLOWED_CHARS}]+$", password):
@@ -188,8 +188,8 @@ def check_username(
     if len(username) < MIN_USERNAME_LENGTH:
         return (
             False,
-            _("Your username must be at least") + f" {MIN_USERNAME_LENGTH} " +
-            _("characters long")
+            _("Your username must be at least") + f" {MIN_USERNAME_LENGTH} "
+            + _("characters long")
         )
 
     return True, ""
@@ -206,8 +206,9 @@ def check_firstname(firstname: str) -> Tuple[bool, str]:
     if len(firstname) < MIN_FIRSTNAME_LENGTH:
         return (
             False,
-            _(f"Your first name must be at least") + f"{MIN_FIRSTNAME_LENGTH} " +
-            _("characters long")
+            _("Your first name must be at least")
+            + f"{MIN_FIRSTNAME_LENGTH} "
+            + _("characters long")
         )
     return True, ""
 

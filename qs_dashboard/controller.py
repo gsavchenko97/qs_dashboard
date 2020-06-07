@@ -3,7 +3,10 @@ from typing import Any
 from qs_dashboard.dialog import DialogWindow
 from qs_dashboard.gui import MainWindow
 from qs_dashboard.login import Login
-from qs_dashboard.measurement import MeasurementWindow, MeasurementConvertRuleWindow
+from qs_dashboard.measurement import (
+    MeasurementWindow,
+    MeasurementConvertRuleWindow,
+)
 from qs_dashboard.signup import Signup
 from qs_dashboard.load_data_from_csv import LoadDataWindow
 
@@ -66,13 +69,13 @@ class Controller:
         self.main_window.show_data_loading_window.connect(
             self.show_load_data_window
         )
-        # self.main_window.show_data_saving_window.connect(
-        #     self.show_save_data_window
-        #     )
-        self.main_window.show_measurement_adding_window.connect(self.show_add_measurement_window)
-        self.main_window.show_conv_rule_adding_window.connect(self.show_add_conv_rules_window)
+        self.main_window.show_measurement_adding_window.connect(
+            self.show_add_measurement_window
+        )
+        self.main_window.show_conv_rule_adding_window.connect(
+            self.show_add_conv_rules_window
+        )
         parent_window.close()
-        # print("db and metrics", self.main_window.db.db, self.main_window.db.metrics)
         self.main_window.show()
 
     def show_load_data_window(self, username: str):
@@ -81,42 +84,32 @@ class Controller:
         :param username:
         :return:
         """
-        self.load_data_window = LoadDataWindow(username=username, parent=self.main_window)
+        self.load_data_window = LoadDataWindow(
+            username=username, parent=self.main_window
+        )
         self.load_data_window.show_main_window.connect(self.show_main_window)
         self.load_data_window.show()
 
-    # def show_save_data_window(self, username: str):
-    #     """
-    #     Opens dialog window for data loading from csv-like file
-    #     :param username:
-    #     :return:
-    #     """
-    #     self.save_data_window = SaveDataWindow(username=username, parent=self.main_window)
-    #     self.save_data_window.show_main_window.connect(self.show_main_window)
-    #     self.save_data_window.show()
-
-    def show_add_measurement_window(self, parent_window: Any = None):
+    def show_add_measurement_window(self):
         """
         Opens dialog window for data loading from csv-like file
-        :param parent_window:
-        :param username:
-        :return:
         """
-        self.add_measurement_window = MeasurementWindow(parent=self.main_window)
-        self.add_measurement_window.show_main_window.connect(self.show_main_window)
-        # if parent_window is not None:
-        #     parent_window.close()
+        self.add_measurement_window = MeasurementWindow(
+            parent=self.main_window
+        )
+        self.add_measurement_window.show_main_window.connect(
+            self.show_main_window
+        )
         self.add_measurement_window.show()
 
-    def show_add_conv_rules_window(self, parent_window: Any = None):
+    def show_add_conv_rules_window(self):
         """
         Opens dialog window for data loading from csv-like file
-        :param parent_window:
-        :param username:
-        :return:
         """
-        self.add_conv_rules_window = MeasurementConvertRuleWindow(parent=self.main_window)
-        self.add_conv_rules_window.show_main_window.connect(self.show_main_window)
-        # if parent_window is not None:
-        #     parent_window.close()
+        self.add_conv_rules_window = MeasurementConvertRuleWindow(
+            parent=self.main_window
+        )
+        self.add_conv_rules_window.show_main_window.connect(
+            self.show_main_window
+        )
         self.add_conv_rules_window.show()

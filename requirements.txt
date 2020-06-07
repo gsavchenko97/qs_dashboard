@@ -5,4 +5,4 @@ PyQt5==5.14.2
 wheel
 pyinstaller==3.6
 tornado
-flake8
+flake8==3.8.2

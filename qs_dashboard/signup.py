@@ -10,8 +10,6 @@ from qs_dashboard.utils import (
 )
 
 
-
-
 class Signup(QDialog):
     """
     Sign Up form
@@ -41,7 +39,9 @@ class Signup(QDialog):
         layout.addWidget(self.line_edit_firstname, 1, 0, 1, 3)
 
         self.line_edit_password = QLineEdit()
-        self.line_edit_password.setPlaceholderText(_("Enter your new password"))
+        self.line_edit_password.setPlaceholderText(_(
+            "Enter your new password"
+        ))
         self.line_edit_password.setMaxLength(MAX_PASSWORD_LENGTH)
         self.line_edit_password.setFixedHeight(35)
         layout.addWidget(self.line_edit_password, 2, 0, 1, 3)
@@ -74,36 +74,33 @@ class Signup(QDialog):
         password = self.line_edit_password.text()
         firstname = self.line_edit_firstname.text()
         gender = self.gender
+        create_user_flag = True
 
         messages = []
         valid_password, msg_password = check_password(password)
         if not valid_password:
+            create_user_flag = False
             messages.append(_("Password:"))
             messages.append(self.transform_message(msg_password))
 
         valid_username, msg_username = check_username(username)
         if not valid_username:
+            create_user_flag = False
             messages.append(_("Username:"))
             messages.append(self.transform_message(msg_username))
 
         valid_firstname, msg_firstname = check_firstname(firstname)
         if not valid_firstname:
+            create_user_flag = False
             messages.append(_("Firstname:"))
             messages.append(self.transform_message(msg_firstname))
 
         if gender is None:
+            create_user_flag = False
             messages.append(_("Gender:"))
             messages.append(self.transform_message(
                 _("Please choose your gender")
             ))
-
-        create_user_flag = (
-                valid_password and
-                valid_firstname and
-                valid_firstname and
-                valid_username and
-                gender is not None
-        )
 
         if create_user_flag:
             create_new_user(

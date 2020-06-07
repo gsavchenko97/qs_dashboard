@@ -9,7 +9,6 @@ lorem ipsum lorem ipsum lorem ipsum lorem ipsum
 
 import json
 import os
-
 import pandas as pd
 from qs_dashboard.utils import DB_FOLDER, AVAILABLE_METRICS
 from typing import Dict, List, Any
@@ -26,10 +25,10 @@ def not_empty_db(db: Dict[str, list]) -> bool:
 
 
 def get_scaled_to_range(
-        values: List[Any],
-        start_range: float,
-        end_range: float
-    ):
+    values: List[Any],
+    start_range: float,
+    end_range: float
+):
     """
     Returns list of values scaled to range from start_range to end_range
     :param values: list of values to scale
@@ -39,25 +38,37 @@ def get_scaled_to_range(
     """
     minimum = min(values)
     maximum = max(values)
-    values = [(value - minimum) / (maximum - minimum) for value in values]  # scaling to [0, 1]
-    values = [(end_range - start_range) * value for value in values]  # scaling to [0, end_range - start_range]
-    values = [value + start_range for value in values]  # scaling to [start_range, end_range]
+    values = [
+        (value - minimum) / (maximum - minimum)
+        for value in values
+    ]  # scaling to [0, 1]
+    values = [
+        (end_range - start_range) * value
+        for value in values
+    ]  # scaling to [0, end_range - start_range]
+    values = [
+        value + start_range
+        for value in values
+    ]  # scaling to [start_range, end_range]
     return values
 
 
 class DataBase:
     """
     DataBase class which stores all the information about users and their
-    daily measurement results. It could save current state of the database and load database from
-    existing dump. All the information stored in dictionary of dictionaries. For every user we have
-    a dictionary mapping some measurement result and day in which it was performed to measurement name.
+    daily measurement results. It could save current state
+    of the database and load database from
+    existing dump. All the information stored in dictionary
+    of dictionaries. For every user we have
+    a dictionary mapping some measurement result and day in which
+    it was performed to measurement name.
     """
 
     def __init__(
-            self,
-            username: str,
-            load_from_saved: bool = True
-        ):
+        self,
+        username: str,
+        load_from_saved: bool = True
+    ):
         """
         DataBase object initialization
         :param username: user's name
@@ -67,12 +78,20 @@ class DataBase:
         if not os.path.exists(DB_FOLDER):
             os.makedirs(DB_FOLDER, exist_ok=True)
         self.username = username
-        self.db_path = os.path.join(self.DB_FOLDER, f"database-{username}.json")
-        self.metrics_converter_path = os.path.join(self.DB_FOLDER, f"metrics_converter-{username}.json")
-        self.metrics_path = os.path.join(self.DB_FOLDER, f"metrics-{username}.json")
+        self.db_path = os.path.join(
+            self.DB_FOLDER, f"database-{username}.json"
+        )
+        self.metrics_converter_path = os.path.join(
+            self.DB_FOLDER, f"metrics_converter-{username}.json"
+        )
+        self.metrics_path = os.path.join(
+            self.DB_FOLDER, f"metrics-{username}.json"
+        )
         if load_from_saved:
             self.db = self.load_json(self.db_path)
-            self.metrics_converter = self.load_metrics_converter(self.metrics_converter_path)
+            self.metrics_converter = self.load_metrics_converter(
+                self.metrics_converter_path
+            )
             self.metrics = self.load_json(self.metrics_path)
         else:
             self.db = {}
@@ -161,19 +180,20 @@ class DataBase:
         saves metrics_converter for metrics from DataBase class
         :return: None
         """
-        assert self.metrics_converter != {}, 'trying to save empty metrics converter'
+        assert self.metrics_converter != {}, \
+            "trying to save empty metrics converter"
         to_save = {}
         for key in self.metrics_converter:
             to_save['+'.join(key)] = self.metrics_converter[key]
         json.dump(to_save, open(path, 'w'))
 
     def add_metrics_convertion(
-            self,
-            from_metric: str,
-            to_metric: str,
-            from_value: float,
-            to_value: float
-        ):
+        self,
+        from_metric: str,
+        to_metric: str,
+        from_value: float,
+        to_value: float
+    ):
         """
         adds metrics convert rule to metrics_converter from DataBase class
         :param from_metric: one of the metrics from convert rule
@@ -184,8 +204,10 @@ class DataBase:
         """
         assert from_metric in self.AVAILABLE_METRICS
         assert to_metric in self.AVAILABLE_METRICS
-        self.metrics_converter[(from_metric, to_metric)] = to_value / from_value
-        self.metrics_converter[(to_metric, from_metric)] = from_value / to_value
+        x = to_value / from_value
+        self.metrics_converter[(from_metric, to_metric)] = x
+        y = from_value / to_value
+        self.metrics_converter[(to_metric, from_metric)] = y
         self.save_metrics_converter(self.metrics_converter_path)
 
     def clean_whole_db(self):
@@ -214,18 +236,20 @@ class DataBase:
         """
         should_convert = False
         from_metric = metric
-        if measurement_name in self.metrics and self.metrics[measurement_name] != metric:
+        if measurement_name in self.metrics and \
+                self.metrics[measurement_name] != metric:
             should_convert = True
             from_metric = self.metrics[measurement_name]
 
         return should_convert, from_metric
 
     def add_measurement(
-            self,
-            measurement_name: str,
-            value: float,
-            metric: str,
-            day: int):
+        self,
+        measurement_name: str,
+        value: float,
+        metric: str,
+        day: int
+    ):
         """
         adds measurement result to database
         :param measurement_name: measurement naming
@@ -260,8 +284,8 @@ class DataBase:
 
         if successfully_converted:
             assert len(db[f'{measurement_name}_days']) == 0 or \
-                   day > db[f'{measurement_name}_days'][-1], 'trying to add the day ' \
-                                                             'prior or equal to last added'
+                   day > db[f'{measurement_name}_days'][-1], \
+                   "trying to add the day prior or equal to last added"
             db[measurement_name].append(value)
             db[f'{measurement_name}_days'].append(day)
             self.metrics[measurement_name] = metric
@@ -269,13 +293,14 @@ class DataBase:
         self.db = db
 
     def convert_values(
-            self,
-            values: List[Any],
-            from_metric: str,
-            to_metric: str
-        ):
+        self,
+        values: List[Any],
+        from_metric: str,
+        to_metric: str
+    ):
         """
-        converts values according convert rules from metrics_converter from DataBase class
+        converts values according convert rules
+        from metrics_converter from DataBase class
         :param values: values to convert
         :param from_metric: convert from metric
         :param to_metric: convert to metric
@@ -286,9 +311,9 @@ class DataBase:
         return values
 
     def to_dataframe(
-            self,
-            default_value: float = -1
-        ):
+        self,
+        default_value: float = -1
+    ):
         """
         converts database and metrics from DataBase class to pandas DataFrame
         :param default_value: value to fill for missing measures
@@ -305,13 +330,13 @@ class DataBase:
             'day': []
         }
         minimal_day = min(
-            [day for key, days in db.items() for day in days if
-                '_days' in key]
+            [day for key, days in db.items() for day in days
+             if '_days' in key]
         )
 
         maximal_day = max(
-            [day for key, days in db.items() for day in days if
-                '_days' in key]
+            [day for key, days in db.items() for day in days
+             if '_days' in key]
         )
 
         for measurement_name in sorted(db.keys()):
@@ -322,8 +347,8 @@ class DataBase:
                 value = default_value
                 if day in days:
                     value = db[measurement_name][
-                        db[f'{measurement_name}_days'
-                    ].index(day)]
+                        db[f'{measurement_name}_days'].index(day)
+                    ]
 
                 df['measurement_name'].append(measurement_name)
                 df['value'].append(value)
@@ -333,13 +358,15 @@ class DataBase:
         return pd.DataFrame(df)
 
     def from_dataframe(
-            self,
-            dataframe: pd.DataFrame,
-            default_value: float = -1.0,
-            self_init: bool = True):
+        self,
+        dataframe: pd.DataFrame,
+        default_value: float = -1.0,
+        self_init: bool = True
+    ):
         """
         reverse to self.to_dataframe(database, metrics, default_value=-1)
-        converts pandas DataFrame in appropriate format to database and metrics in DataBase class
+        converts pandas DataFrame in appropriate format
+        to database and metrics in DataBase class
         :param self_init: whether to init self object
         :param dataframe: pandas DataFrame to convert
         :param default_value: value denoting missing values in csv
@@ -349,23 +376,25 @@ class DataBase:
         db = {}
 
         metrics = dict(
-            df.apply(lambda r: (r.measurement_name, r.metric), axis=1).unique()
+            df.apply(
+                lambda r: (r.measurement_name, r.metric), axis=1
+            ).unique()
         )
 
         total_measurements = df.measurement_name.unique()
         for measurement_name in total_measurements:
             measurement_df = df[df.measurement_name == measurement_name]
             indices = [
-                i for i, value in enumerate(measurement_df.value.values) if
-                    value != default_value
+                i for i, value in enumerate(measurement_df.value.values)
+                if value != default_value
             ]
             days = [
-                day for i, day in enumerate(measurement_df.day.values) if
-                    i in indices
+                day for i, day in enumerate(measurement_df.day.values)
+                if i in indices
             ]
             values = [
-                value for i, value in enumerate(measurement_df.value.values) if
-                    i in indices
+                value for i, value in enumerate(measurement_df.value.values)
+                if i in indices
             ]
             db[measurement_name] = [float(value) for value in values]
             db[f'{measurement_name}_days'] = [int(day) for day in days]
