@@ -10,11 +10,29 @@ import sys
 
 import gettext
 
-data_path = os.path.join(
-    os.path.dirname(sys.argv[0]), "qs_dashboard", "locales"
+dir_name = os.path.dirname(sys.argv[0])
+dir_name = '/'.join(dir_name.split('/')[:-1])
+
+major = sys.version_info.major
+minor = sys.version_info.minor
+python_version = f"python{major}.{minor}"
+site_packages = os.path.join(
+    dir_name, "lib",
+    f"python{major}.{minor}", "site-packages"
 )
-# data_path = os.path.join(Path(__file__).resolve().parent, 'locales')
+
+if os.path.exists(site_packages):
+    data_path = site_packages
+else:
+    data_path = os.path.dirname(sys.argv[0])
+
+data_path = os.path.join(
+    data_path, "qs_dashboard", "locales"
+)
+
 gettext.install("qs_dashboard", data_path)
+print(sys.argv[0])
+print(site_packages)
 print(data_path)
 
 MAX_USERNAME_LENGTH = 30
